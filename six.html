@@ -71,7 +71,8 @@ main { max-width: 68rem; margin: 0 auto; padding: .75rem 1rem 2.5rem; }
 ol.steps { margin: 0 0 .7rem; padding-left: 1.4rem; } ol.steps li { margin-bottom: .25rem; }
 .notelabel { width: fit-content; min-height: 1.75rem; margin: -.3rem auto .4rem; padding: .15rem .75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font: 600 .88rem/1.35 system-ui, -apple-system, sans-serif; font-variant-numeric: tabular-nums; }
 .notelabel:empty { border-color: transparent; background: none; }
-.say { min-height: 3em; margin: .55rem 0 .5rem; font-size: .98rem; }
+/* live readout under the controls: styled apart from the lesson text, amber like the glowing strings */
+.say { display: flex; align-items: center; min-height: 3em; margin: .55rem 0 .5rem; padding: .15rem 0 .15rem .7rem; border-left: 3px solid var(--glow); font-size: .94rem; font-style: italic; color: var(--soft); }
 .ctrl { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
 .ctrl + .ctrl { margin-top: .5rem; }
 .ctrl .lbl { font-size: .85rem; color: var(--soft); margin-right: .1rem; }

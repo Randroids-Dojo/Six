@@ -1,6 +1,6 @@
 // Functional verification of six.html in real Google Chrome (headless), using qa/instrument.js:
 // every audio source start/stop is logged, and the final mix is captured sample by sample.
-import { launch, open, PHONE, SMALL, DESK, sleep } from './lib.mjs';
+import { launch, open, PHONE, PIXEL, SMALL, DESK, sleep } from './lib.mjs';
 
 const OPEN = [0, 5, 10, 15, 19, 24];
 const hz = h => 82.406889 * 2 ** (h / 12);
@@ -461,7 +461,7 @@ await ctx.close();
 }
 
 // ---------- 14. Phone: touch taps, sizes, overflow at many widths ----------
-for (const [name, opts] of [['Pixel 8 Pro 448', PHONE], ['small Android 360', SMALL]]) {
+for (const [name, opts] of [['Pixel 8 Pro 448', PHONE], ['Pixel 8 Pro 412', PIXEL], ['small Android 360', SMALL]]) {
   const o = await open(browser, opts, '1');
   await o.page.tap('#b1 .cell[data-l="2"][data-f="2"]');
   await sleep(400);
