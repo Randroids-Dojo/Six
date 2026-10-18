@@ -3,3 +3,4 @@ qa/shots/
 qa/last-verify.txt
 .vercel
 .DS_Store
+.env*
