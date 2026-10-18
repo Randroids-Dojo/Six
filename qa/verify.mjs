@@ -77,7 +77,7 @@ const s1text = () => ev(() => ({ cap: $('#say1').textContent, note: $('#note1').
   await sleep(200);
   t1 = await s1text();
   check('scene 1 tap: label reads "Lane 6 · open"', t1.note === 'Lane 6 · open' && t1.cap === CAP_START, JSON.stringify(t1));
-  await page.click('#stop');
+  await page.click('#stop', { force: true });
   await sleep(150);
   // calibrate capture latency from the onset of that note
   OFF = await ev(w => { const b = window.__cap.blocks.find(x => x.rms > 0.003 && x.t > w); return b ? b.t - w : 0.02; }, oscStarts(lg)[0].when);
@@ -126,7 +126,7 @@ const s1text = () => ev(() => ({ cap: $('#say1').textContent, note: $('#note1').
   const cents = [];
   const spots = [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [0, 7], [2, 2], [3, 1], [3, 2], [4, 5], [5, 5], [5, 7]];
   for (const [l, f] of spots) {
-    await page.click('#stop');
+    await page.click('#stop', { force: true });
     await sleep(150);
     await ev(() => { window.__rec = true; });
     const m = await mark();
@@ -421,7 +421,8 @@ async function runProgression(p, bpm) {
 // ---------- 12. Keyboard ----------
 {
   await go(1);
-  await page.click('#stop');
+  await page.waitForFunction(() => document.activeElement && document.activeElement.id === 'h1');  // scene change moves focus first
+  await page.click('#stop', { force: true });
   await ev(() => document.activeElement.blur());
   let tabs = 0, onCell = false;
   while (tabs < 30 && !onCell) { await page.keyboard.press('Tab'); tabs++; onCell = await ev(() => document.activeElement.classList.contains('cell')); }
@@ -444,10 +445,62 @@ async function runProgression(p, bpm) {
   await page.keyboard.press('Enter');
   await sleep(700);
   check('keyboard: one Tab leaves the board to its first button, which plays', nextIsBtn === 'climb' && hts(await since(m2)).length >= 1, nextIsBtn);
-  await page.click('#stop');
+  await page.click('#stop', { force: true });
 }
 check('no console errors or warnings in desktop run', errors.length === 0, errors.join(' | '));
 await ctx.close();
+
+// ---------- 12b. Header: Stop is active only while sound plays or is lined up; Mute is a speaker icon ----------
+{
+  const o = await open(browser, DESK, '1');
+  const p = o.page;
+  const st = () => p.evaluate(() => $('#stop').getAttribute('aria-disabled'));
+  const hdr = await p.evaluate(() => { const b = document.querySelector('.bar'); return { text: b.innerText.replace(/\s+/g, ' ').trim(), bg: getComputedStyle(b).backgroundColor, h: Math.round(b.getBoundingClientRect().height) }; });
+  check('header: just "Six", Stop and the Mute icon, on a solid bar', hdr.text === 'Six Stop' && /^rgb\(/.test(hdr.bg), JSON.stringify(hdr));
+  check('Stop starts inactive', (await st()) === 'true');
+  await p.click('#stop', { force: true });
+  check('pressing inactive Stop does nothing', (await p.evaluate(() => window.__ctxCount)) === 0 && (await st()) === 'true');
+  await p.click('#b1 .cell[data-l="5"][data-f="7"]');
+  await sleep(100);
+  const on1 = await st();
+  const tEnd = await p.evaluate(() => { const v = [...E.voices][0]; return v.start + 0.35 + (1.9 - v.h * 0.022) * 5.5; });
+  let offAt = null;
+  for (let i = 0; i < 120 && offAt == null; i++) { await sleep(100); if ((await st()) === 'true') offAt = await p.evaluate(() => window.__ctx.currentTime); }
+  check('Stop is active while a tapped note sounds and inactive once it has ended', on1 === 'false' && offAt != null && offAt >= tEnd - 0.01 && offAt - tEnd < 0.35,
+    `note ends at ${tEnd.toFixed(2)} s, Stop inactive at ${offAt && offAt.toFixed(2)} s`);
+  await p.click('#climb');
+  const samples = [];
+  for (let i = 0; i < 40; i++) { samples.push(await st()); await sleep(100); }
+  check('Stop stays active through a whole demo, gaps included', samples.every(x => x === 'false'));
+  await p.click('#stop');
+  await sleep(60);
+  check('Stop goes inactive as soon as it is pressed', (await st()) === 'true');
+  await p.click('.tabs a[href="#6"]');
+  await p.click('[data-bpm="66"]');
+  await p.click('#play6');
+  while (!(await p.evaluate(() => $('#word6').textContent === 'Hush'))) await sleep(20);
+  await sleep(350);
+  const hushSilent = (await p.evaluate(() => [...E.voices].filter(v => v.relT == null || v.relT > window.__ctx.currentTime).length)) === 0;
+  const s6 = { hush: await st() };
+  await p.click('#play6'); await sleep(60); s6.paused = await st();
+  await p.click('#play6'); await sleep(100); s6.resumed = await st();
+  await p.click('.tabs a[href="#5"]'); await sleep(60); s6.left = await st();
+  check('scene 6: Stop active through a silent Hush beat, inactive on Pause, active on Resume, inactive after leaving',
+    hushSilent && s6.hush === 'false' && s6.paused === 'true' && s6.resumed === 'false' && s6.left === 'true', JSON.stringify(s6));
+  const icon = () => p.evaluate(() => ({ pressed: $('#mute').getAttribute('aria-pressed'), on: getComputedStyle($('#mute .on')).display, off: getComputedStyle($('#mute .off')).display, title: $('#mute').title, label: $('#mute').getAttribute('aria-label') }));
+  const i0 = await icon(); await p.click('#mute'); const i1 = await icon(); await p.click('#mute'); const i2 = await icon();
+  check('Mute shows a speaker, a crossed-out speaker while muted, then a speaker again',
+    i0.on !== 'none' && i0.off === 'none' && i1.on === 'none' && i1.off !== 'none' && i1.pressed === 'true' && i1.title === 'Unmute' && i2.on !== 'none' && i2.off === 'none' && i2.pressed === 'false' && i0.label === 'Mute practice tones', JSON.stringify([i0, i1, i2]));
+  await p.evaluate(() => $('#mute').focus());
+  await p.keyboard.press('Shift+Tab');
+  const f = await p.evaluate(() => [document.activeElement.id, $('#stop').getAttribute('aria-disabled')]);
+  const m = await p.evaluate(() => window.__log.length);
+  await p.keyboard.press('Enter');
+  await sleep(200);
+  check('keyboard: inactive Stop is still reachable and Enter on it does nothing', f[0] === 'stop' && f[1] === 'true' && (await p.evaluate(m => window.__log.length - m, m)) === 0, f.join(' '));
+  check('header run: no console errors', o.errors.length === 0, o.errors.join(' | '));
+  await o.ctx.close();
+}
 
 // ---------- 13. Reduced motion ----------
 {
@@ -478,12 +531,12 @@ for (const [name, opts] of [['Pixel 8 Pro 448', PHONE], ['Pixel 8 Pro 412', PIXE
     lay.board <= lay.note[0] && lay.note[1] <= lay.ctrl[0] && lay.ctrl[1] <= lay.cap[0] && lay.note[1] - lay.note[0] < 40 && lay.note[2] >= 0 && lay.note[3] <= lay.vw && lay.text === 'Lane 1 · fret 7' && lay.cap1 === CAP_CLIMB,
     `board ends ${lay.board}, label ${lay.note[0]}–${lay.note[1]}, buttons ${lay.ctrl[0]}–${lay.ctrl[1]}, caption ${lay.cap[0]}–${lay.cap[1]} of ${lay.vh}px`);
   await o.page.screenshot({ path: `shots/s1-feedback-${opts.viewport.width}.png` });
-  await o.page.tap('#stop');
+  await o.page.tap('#stop', { force: true });
   let small = [];
   for (let s = 1; s <= 6; s++) {
     await o.page.tap(`.tabs a[href="#${s}"]`);
     await sleep(100);
-    small = small.concat(await o.page.evaluate(n => [...document.querySelectorAll(`#s${n} .cell, #s${n} .btn, .bar .btn, .tabs a, #s${n} summary`)].map(e => { const r = e.getBoundingClientRect(); return { n: e.id || e.className || e.tagName, w: r.width, h: r.height }; }).filter(r => r.w && (r.w < 43.5 || r.h < 43.5)), s));
+    small = small.concat(await o.page.evaluate(n => [...document.querySelectorAll(`#s${n} .cell, #s${n} .btn, .bar button, .tabs a, #s${n} summary`)].map(e => { const r = e.getBoundingClientRect(); return { n: e.id || e.className || e.tagName, w: r.width, h: r.height }; }).filter(r => r.w && (r.w < 43.5 || r.h < 43.5)), s));
   }
   check(`${name}: every touch target is at least 44 × 44 px`, small.length === 0, small.slice(0, 5).map(x => `${x.n} ${x.w.toFixed(0)}×${x.h.toFixed(0)}`).join(', '));
   check(`${name}: no console errors`, o.errors.length === 0, o.errors.join(' | '));

@@ -18,6 +18,7 @@
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
+button, a { -webkit-tap-highlight-color: transparent; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 1.0625rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 h2 { font: 600 1.6rem/1.15 var(--serif); margin: 0; }
 h2:focus { outline: none; }
@@ -29,10 +30,18 @@ b { font-weight: 650; }
 /* top bar */
 .bar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: .5rem;
   padding: .45rem max(1rem, env(safe-area-inset-right)) .45rem max(1rem, env(safe-area-inset-left));
-  background: rgba(244, 239, 230, .96); border-bottom: 1px solid var(--line); }
-.brand { flex: 1; min-width: 0; line-height: 1.15; }
-.brand b { font: 700 1.3rem/1 var(--serif); }
-.brand span { display: block; font-size: .75rem; color: var(--soft); }
+  background: var(--bg); border-bottom: 1px solid var(--line); }
+.brand { flex: 1; font: 700 1.45rem/1 var(--serif); }
+.stopbtn { min-height: 44px; display: inline-flex; align-items: center; gap: .45rem; padding: 0 1.05rem 0 .9rem; border: 1.5px solid var(--ink); border-radius: 999px;
+  background: var(--ink); color: var(--bg); font: 600 .95rem/1 system-ui, -apple-system, sans-serif; cursor: pointer; }
+.stopbtn svg { width: 13px; height: 13px; fill: currentColor; }
+.stopbtn[aria-disabled="true"] { background: transparent; border-color: var(--line); color: #8f8577; cursor: default; }
+.ibtn { width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 1.5px solid var(--ink); border-radius: 50%; background: var(--card); color: var(--ink); cursor: pointer; }
+.ibtn svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ibtn svg .cone { fill: currentColor; stroke: none; }
+.ibtn .off, .ibtn[aria-pressed="true"] .on { display: none; }
+.ibtn[aria-pressed="true"] .off { display: block; }
+.ibtn[aria-pressed="true"] { background: #e4d5ba; }
 .btn { min-height: 44px; min-width: 44px; padding: .5rem .9rem; border: 1.5px solid var(--ink); border-radius: .6rem;
   background: var(--card); color: var(--ink); font: 600 .95rem/1.15 system-ui, -apple-system, sans-serif;
   cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: .4rem; }
@@ -40,7 +49,6 @@ b { font-weight: 650; }
 .btn[aria-pressed="true"] { background: #e4d5ba; box-shadow: inset 0 0 0 1.5px var(--ink); }
 .btn[aria-pressed="true"]:not(#mute)::before { content: "✓"; font-weight: 800; }
 .btn.small { min-height: 44px; padding: .4rem .75rem; font-size: .88rem; }
-.btn .sq { width: .7em; height: .7em; background: currentColor; border-radius: 1px; }
 .btn code { font: 600 .85em var(--mono); opacity: .85; }
 
 /* scene tabs */
@@ -155,7 +163,8 @@ dl.acts { margin: 0 0 .7rem; display: grid; grid-template-columns: auto 1fr; gap
 dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 
 @media (hover: hover) {
-  .btn:not(.primary):not([aria-pressed="true"]):hover { background: #fff; } .btn.primary:hover { background: #3a332b; }
+  .btn:not(.primary):not([aria-pressed="true"]):hover, .ibtn:not([aria-pressed="true"]):hover { background: #fff; }
+  .btn.primary:hover, .stopbtn:not([aria-disabled="true"]):hover { background: #3a332b; }
   .tabs a:hover:not([aria-current]) { background: rgba(30, 26, 21, .07); }
   .cell:hover { background: rgba(255, 255, 255, .08); } .r0 .cell:hover { background: rgba(30, 26, 21, .07); }
 }
@@ -165,9 +174,12 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 </head>
 <body>
 <header class="bar">
-  <div class="brand"><b>Six</b><span>experimental method · synthesized practice tones</span></div>
-  <button class="btn small" id="stop" type="button"><span class="sq" aria-hidden="true"></span>Stop</button>
-  <button class="btn small" id="mute" type="button" aria-pressed="false" aria-label="Mute practice tones">Mute</button>
+  <b class="brand">Six</b>
+  <button class="stopbtn" id="stop" type="button" aria-disabled="true" aria-label="Stop sound"><svg viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" rx="2"/></svg>Stop</button>
+  <button class="ibtn" id="mute" type="button" aria-pressed="false" aria-label="Mute practice tones" title="Mute">
+    <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path class="cone" d="M3 9.5v5h3.6l4.9 4V5.5l-4.9 4z"/><path d="M15 9.4a3.8 3.8 0 0 1 0 5.2M17.8 6.7a7.6 7.6 0 0 1 0 10.6"/></svg>
+    <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path class="cone" d="M3 9.5v5h3.6l4.9 4V5.5l-4.9 4z"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5"/></svg>
+  </button>
 </header>
 <nav class="tabs" aria-label="Scenes">
   <ol>
@@ -473,8 +485,9 @@ function voice(h, t, vel = 1) {
   const v = { o, g, h, f, start: t, relT: null, fade: 0.35 + tau * 2 };
   o.start(t);
   o.stop(t + 0.35 + tau * 5.5);
-  o.onended = () => { E.voices.delete(v); if (v.view) v.view.b.dark(v.view.l, v); try { g.disconnect(); } catch (e) {} };
+  o.onended = () => { E.voices.delete(v); if (v.view) v.view.b.dark(v.view.l, v); try { g.disconnect(); } catch (e) {} syncStop(); };
   E.voices.add(v);
+  syncStop();
   return v;
 }
 // End a sound at audio time t with a short fade.
@@ -491,6 +504,12 @@ function release(v, t, r = 0.02) {
   if (v.view) atTime(t, () => v.view.b.dark(v.view.l, v));
 }
 const live = (v, t) => v.relT == null || v.relT > t;
+// Stop is active only while a sound is playing or lined up (including a running progression).
+function syncStop() {
+  const t = E.ctx ? E.ctx.currentTime : 0;
+  const busy = T.on || [...E.voices].some(v => live(v, t));
+  $('#stop').setAttribute('aria-disabled', String(!busy));
+}
 function hushAll(t) { E.voices.forEach(v => { if (!v.brush && live(v, t)) release(v, t, 0.02); }); }
 
 // Play lane l at fret f on board b. One sound per lane, like a real string.
@@ -523,8 +542,9 @@ function brush(t, lanes) {
     s.connect(bp); bp.connect(g); g.connect(E.master);
     const v = { o: s, g, start: ti, relT: null, brush: true };
     s.start(ti, Math.random() * 0.8, 0.12);
-    s.onended = () => { E.voices.delete(v); try { g.disconnect(); } catch (e) {} };
+    s.onended = () => { E.voices.delete(v); try { g.disconnect(); } catch (e) {} syncStop(); };
     E.voices.add(v);
+    syncStop();
   });
 }
 function tick(t, accent) {
@@ -536,8 +556,9 @@ function tick(t, accent) {
   o.connect(g); g.connect(E.master);
   const v = { o, g, start: t, relT: null, brush: true };
   o.start(t); o.stop(t + 0.12);
-  o.onended = () => { E.voices.delete(v); try { g.disconnect(); } catch (e) {} };
+  o.onended = () => { E.voices.delete(v); try { g.disconnect(); } catch (e) {} syncStop(); };
   E.voices.add(v);
+  syncStop();
 }
 // Stop everything now, including anything scheduled but not yet heard.
 function stopAll(reason = 'stop') {
@@ -554,6 +575,7 @@ function stopAll(reason = 'stop') {
   E.lanes.clear();
   boards.forEach(b => b.darkAll());
   E.hooks.forEach(fn => fn(reason));
+  syncStop();
 }
 // Wrap a button action: stop what is playing, unlock audio, then schedule from time t.
 function act(fn) {
@@ -935,6 +957,7 @@ async function play6(from) {
   await ready();
   if (g !== E.gen) return;
   T.beat = from; T.on = true; T.count = 4; T.heard = -1;
+  syncStop();
   T.next = E.ctx.currentTime + 0.1;
   b6.setShape(S[PROG[from >> 2]]);
   ui6();
@@ -961,11 +984,11 @@ document.querySelectorAll('[data-bpm]').forEach(btn => btn.addEventListener('cli
 }));
 
 /* ---------- Page ---------- */
-on('#stop', () => stopAll('stop'));
+on('#stop', () => { if ($('#stop').getAttribute('aria-disabled') !== 'true') stopAll('stop'); });
 on('#mute', () => {
   E.muted = !E.muted;
   $('#mute').setAttribute('aria-pressed', String(E.muted));
-  $('#mute').textContent = E.muted ? 'Muted' : 'Mute';
+  $('#mute').title = E.muted ? 'Unmute' : 'Mute';
   if (E.master) E.master.gain.setTargetAtTime(E.muted ? 0 : VOL, E.ctx.currentTime, 0.015);
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden) T.on ? pause6() : stopAll('hidden'); });
