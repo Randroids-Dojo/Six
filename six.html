@@ -69,6 +69,8 @@ main { max-width: 68rem; margin: 0 auto; padding: .75rem 1rem 2.5rem; }
 .try { background: var(--card); border-left: 4px solid var(--ink); padding: .6rem .8rem; border-radius: 0 .5rem .5rem 0; }
 .note, .aside { font-size: .92rem; color: var(--soft); }
 ol.steps { margin: 0 0 .7rem; padding-left: 1.4rem; } ol.steps li { margin-bottom: .25rem; }
+.notelabel { width: fit-content; min-height: 1.75rem; margin: -.3rem auto .4rem; padding: .15rem .75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font: 600 .88rem/1.35 system-ui, -apple-system, sans-serif; font-variant-numeric: tabular-nums; }
+.notelabel:empty { border-color: transparent; background: none; }
 .say { min-height: 3em; margin: .55rem 0 .5rem; font-size: .98rem; }
 .ctrl { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
 .ctrl + .ctrl { margin-top: .5rem; }
@@ -188,11 +190,12 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
   </div>
   <div class="stage">
     <div id="b1"></div>
+    <p class="notelabel" id="note1" aria-live="polite"></p>
     <div class="ctrl">
       <button class="btn" type="button" id="climb">Lane 1, frets 0 to 7</button>
       <button class="btn" type="button" id="opens">Lanes 1 to 6, open</button>
     </div>
-    <p class="say" id="say1" aria-live="polite">Tap row 0 to pluck a string open. Tap further down to press it at a fret.</p>
+    <p class="say" id="say1" aria-live="polite">Tap a string or fret, or try a demo.</p>
   </div>
   <div class="after">
     <p><b>Open</b>, written 0, means you pluck the string without pressing it. The whole string vibrates, from the head to the bridge on the body.</p>
@@ -762,10 +765,18 @@ const lanesOf = s => s.frets.map((f, l) => f == null ? -1 : l).filter(l => l >= 
 
 /* ---------- Scene 1: tap a string ---------- */
 const b1 = Board($('#b1'));
-const say1 = (l, f) => { $('#say1').textContent = f ? `${posName(l, f)}: ${f} fret${f > 1 ? 's' : ''} higher than lane ${l + 1} open.` : `${posName(l, 0)}: nothing pressed, so the whole string vibrates.`; };
-b1.onTap = (l, f) => tapNote(b1, l, f, () => say1(l, f));
-on('#climb', act(t => { for (let f = 0; f <= FRETS; f++) { const tf = t + f * 0.55; note(b1, 0, f, tf); atTime(tf, () => say1(0, f)); } }));
-on('#opens', act(t => { for (let l = 0; l < 6; l++) { const tl = t + l * 0.65; note(b1, l, 0, tl); atTime(tl, () => say1(l, 0)); } }));
+// The label by the board names each note as it sounds; the caption under the buttons describes the chosen demo.
+const note1 = (l, f) => { $('#note1').textContent = `Lane ${l + 1} · ${f ? 'fret ' + f : 'open'}`; };
+const demo1 = text => { $('#say1').textContent = text; };
+b1.onTap = (l, f) => tapNote(b1, l, f, () => note1(l, f));
+on('#climb', act(t => {
+  demo1('Hear the same string rise in pitch, one fret at a time.');
+  for (let f = 0; f <= FRETS; f++) { const tf = t + f * 0.55; note(b1, 0, f, tf); atTime(tf, () => note1(0, f)); }
+}));
+on('#opens', act(t => {
+  demo1('Hear all six open strings, from thickest to thinnest.');
+  for (let l = 0; l < 6; l++) { const tl = t + l * 0.65; note(b1, l, 0, tl); atTime(tl, () => note1(l, 0)); }
+}));
 
 /* ---------- Scene 2: build Bare ---------- */
 const b2 = Board($('#b2'), { shape: true, fingers: true });

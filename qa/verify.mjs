@@ -58,6 +58,12 @@ async function waitCtx(t) { while ((await now()) < t) await sleep(40); }
 for (let n = 1; n <= 6; n++) { await go(n); await sleep(120); }
 await go(1);
 check('no AudioContext and no sound before a tap (all scenes visited)', (await ev(() => window.__ctxCount)) === 0 && (await mark()) === 0);
+const CAP_CLIMB = 'Hear the same string rise in pitch, one fret at a time.', CAP_OPENS = 'Hear all six open strings, from thickest to thinnest.', CAP_START = 'Tap a string or fret, or try a demo.';
+const s1text = () => ev(() => ({ cap: $('#say1').textContent, note: $('#note1').textContent }));
+{
+  const t = await s1text();
+  check('scene 1 before any tap: instruction shown, note label empty', t.cap === CAP_START && t.note === '', JSON.stringify(t));
+}
 
 // ---------- 3. Scene 1: tap, climb, opens; measured pitch of the real output ----------
 {
@@ -65,14 +71,30 @@ check('no AudioContext and no sound before a tap (all scenes visited)', (await e
   await sleep(400);
   const lg = await since(0);
   check('scene 1 tap lane 1 fret 3 plays Height 3', sameList(hts(lg), [3]), `ctx state ${await ev(() => window.__ctx.state)}`);
+  let t1 = await s1text();
+  check('scene 1 tap: label reads "Lane 1 · fret 3", caption unchanged', t1.note === 'Lane 1 · fret 3' && t1.cap === CAP_START, JSON.stringify(t1));
+  await page.click('#b1 .cell[data-l="5"][data-f="0"]');
+  await sleep(200);
+  t1 = await s1text();
+  check('scene 1 tap: label reads "Lane 6 · open"', t1.note === 'Lane 6 · open' && t1.cap === CAP_START, JSON.stringify(t1));
+  await page.click('#stop');
+  await sleep(150);
   // calibrate capture latency from the onset of that note
   OFF = await ev(w => { const b = window.__cap.blocks.find(x => x.rms > 0.003 && x.t > w); return b ? b.t - w : 0.02; }, oscStarts(lg)[0].when);
   console.log(`      capture offset ${(OFF * 1000).toFixed(1)} ms`);
 
   async function pitched(btn, expectH, gap) {
-    await ev(() => { window.__rec = true; });
+    await ev(() => {
+      window.__rec = true;
+      window.__notes = [];
+      window.__mo && window.__mo.disconnect();
+      window.__mo = new MutationObserver(() => window.__notes.push({ text: $('#note1').textContent, t: window.__ctx.currentTime }));
+      window.__mo.observe($('#note1'), { childList: true, characterData: true, subtree: true });
+    });
     const m = await mark();
     await page.click(btn);
+    await sleep(120);
+    const capDuring = await ev(() => $('#say1').textContent);
     await sleep(gap * 1000 * expectH.length + 700);
     await ev(() => { window.__rec = false; });
     const lg = await since(m), st = oscStarts(lg);
@@ -84,15 +106,23 @@ check('no AudioContext and no sound before a tap (all scenes visited)', (await e
       det.push(detectPitch(x, sr));
     }
     const cents = det.map((f, i) => 1200 * Math.log2(f / hz(expectH[i])));
-    return { got, gaps, cents };
+    const notes = await ev(() => window.__notes);
+    const lag = notes.map((n, i) => st[i] ? n.t - st[i].when : NaN);
+    return { got, gaps, cents, capDuring, capAfter: (await s1text()).cap, labels: notes.map(n => n.text), lag };
   }
   const sr = await ev(() => window.__cap.sr);
   if (sr !== 48000) console.log('      sample rate', sr);
   const climb = await pitched('#climb', [0, 1, 2, 3, 4, 5, 6, 7], 0.55);
   check('scene 1 "Climb lane 1" plays Heights 0..7, one per fret', sameList(climb.got, [0, 1, 2, 3, 4, 5, 6, 7]) && climb.gaps.every(g => near(g, 0.55, 0.002)));
   check('scene 1 climb: measured output pitch within 3 cents of formula', climb.cents.every(c => Math.abs(c) < 3), climb.cents.map(c => c.toFixed(2)).join(' '));
+  check('scene 1 climb: caption describes the demo during it and after it ends', climb.capDuring === CAP_CLIMB && climb.capAfter === CAP_CLIMB, climb.capAfter);
+  check('scene 1 climb: label names each note, open then frets 1 to 7', sameList(climb.labels, ['Lane 1 · open', ...[1, 2, 3, 4, 5, 6, 7].map(f => 'Lane 1 · fret ' + f)]), climb.labels.join(' | '));
+  check('scene 1 climb: each label change lands within 60 ms after its note', climb.lag.every(x => x > -0.005 && x < 0.06), `ms ${climb.lag.map(x => Math.round(x * 1000)).join(' ')}`);
   const opens = await pitched('#opens', [0, 5, 10, 15, 19, 24], 0.65);
   check('scene 1 "Lanes 1 to 6, open" plays Heights 0 5 10 15 19 24', sameList(opens.got, [0, 5, 10, 15, 19, 24]));
+  check('scene 1 opens: caption describes the demo during it and after it ends', opens.capDuring === CAP_OPENS && opens.capAfter === CAP_OPENS, opens.capAfter);
+  check('scene 1 opens: label names lanes 1 to 6 open, in order', sameList(opens.labels, [1, 2, 3, 4, 5, 6].map(l => `Lane ${l} · open`)), opens.labels.join(' | '));
+  check('scene 1 opens: each label change lands within 60 ms after its note', opens.lag.every(x => x > -0.005 && x < 0.06), `ms ${opens.lag.map(x => Math.round(x * 1000)).join(' ')}`);
   const cents = [];
   const spots = [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [0, 7], [2, 2], [3, 1], [3, 2], [4, 5], [5, 5], [5, 7]];
   for (const [l, f] of spots) {
@@ -115,16 +145,16 @@ check('no AudioContext and no sound before a tap (all scenes visited)', (await e
   const m = await mark();
   await page.click('#climb');
   await sleep(1200);
-  const sayBefore = await ev(() => $('#say1').textContent);
+  const before = await s1text();
   await page.click('#stop');
   const tStop = await now();
   await sleep(4000);
   const lg = await since(m);
   const later = lg.filter(e => e.ev === 'start' && e.now > tStop);
   const r = await rmsRange(tStop + 0.06, tStop + 3.8);
-  const sayAfter = await ev(() => $('#say1').textContent);
+  const after = await s1text();
   check('Stop silences already-scheduled future notes (scene 1 climb)', later.length === 0 && r.max < SILENT && r.n > 100, `max RMS after stop ${r.max.toExponential(1)} over ${r.n} blocks`);
-  check('Stop cancels pending visual updates', sayBefore === sayAfter, sayAfter);
+  check('Stop freezes the note label (no pending updates) and keeps the demo caption', before.note === after.note && /fret [12]$/.test(after.note) && after.cap === CAP_CLIMB, JSON.stringify(after));
   check('Stop darkens the strings', await ev(() => [...document.querySelectorAll('#b1 .vib')].every(v => +getComputedStyle(v).opacity === 0)));
 }
 
@@ -437,6 +467,18 @@ for (const [name, opts] of [['Pixel 8 Pro 448', PHONE], ['small Android 360', SM
   await sleep(400);
   const lg = await o.page.evaluate(() => window.__log);
   check(`${name}: touch tap plays lane 3 fret 2 (Height 12)`, sameList(hts(lg), [12]) && (await o.page.evaluate(() => window.__ctx.state)) === 'running');
+  await o.page.tap('#climb');
+  await sleep(4800);
+  const lay = await o.page.evaluate(() => {
+    const r = s => document.querySelector(s).getBoundingClientRect();
+    const b = r('#b1'), n = r('#note1'), c = r('#s1 .ctrl'), y = r('#say1');
+    return { board: Math.round(b.bottom), note: [Math.round(n.top), Math.round(n.bottom), Math.round(n.left), Math.round(n.right)], ctrl: [Math.round(c.top), Math.round(c.bottom)], cap: [Math.round(y.top), Math.round(y.bottom)], vh: innerHeight, vw: innerWidth, text: $('#note1').textContent, cap1: $('#say1').textContent };
+  });
+  check(`${name}: scene 1 order is board, note label, demo buttons, caption; label on one line`,
+    lay.board <= lay.note[0] && lay.note[1] <= lay.ctrl[0] && lay.ctrl[1] <= lay.cap[0] && lay.note[1] - lay.note[0] < 40 && lay.note[2] >= 0 && lay.note[3] <= lay.vw && lay.text === 'Lane 1 · fret 7' && lay.cap1 === CAP_CLIMB,
+    `board ends ${lay.board}, label ${lay.note[0]}–${lay.note[1]}, buttons ${lay.ctrl[0]}–${lay.ctrl[1]}, caption ${lay.cap[0]}–${lay.cap[1]} of ${lay.vh}px`);
+  await o.page.screenshot({ path: `shots/s1-feedback-${opts.viewport.width}.png` });
+  await o.page.tap('#stop');
   let small = [];
   for (let s = 1; s <= 6; s++) {
     await o.page.tap(`.tabs a[href="#${s}"]`);
