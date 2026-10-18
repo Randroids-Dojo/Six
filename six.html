@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Six · an experimental way to learn the guitar</title>
+<meta name="description" content="Six short hands-on scenes for a standard-tuned six-string guitar: lanes, shapes, Height, chord recipes and a first progression.">
+<style>
+:root {
+  --bg: #f4efe6; --card: #fffaf1; --ink: #1e1a15; --soft: #574e43; --line: #d6cab7;
+  --wood: #3b2a1e; --wood-d: #2a1d14; --glow: #ffb020; --glow-ink: #8a4f00;
+  --chg: #2fc6d0; --chg-ink: #08656c; --dot: #fbf5e8; --focus: #1f63c4;
+  --gut: 2.7rem; --open: 2.75rem; --fh: 2.8rem; --tail: 1.4rem;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Noto Serif", serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 1.0625rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+h2 { font: 600 1.6rem/1.15 var(--serif); margin: 0; }
+h2:focus { outline: none; }
+p { margin: 0 0 .7rem; }
+b { font-weight: 650; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+/* top bar */
+.bar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: .5rem;
+  padding: .45rem max(1rem, env(safe-area-inset-right)) .45rem max(1rem, env(safe-area-inset-left));
+  background: rgba(244, 239, 230, .96); border-bottom: 1px solid var(--line); }
+.brand { flex: 1; min-width: 0; line-height: 1.15; }
+.brand b { font: 700 1.3rem/1 var(--serif); }
+.brand span { display: block; font-size: .75rem; color: var(--soft); }
+.btn { min-height: 44px; min-width: 44px; padding: .5rem .9rem; border: 1.5px solid var(--ink); border-radius: .6rem;
+  background: var(--card); color: var(--ink); font: 600 .95rem/1.15 system-ui, -apple-system, sans-serif;
+  cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: .4rem; }
+.btn.primary { background: var(--ink); color: var(--bg); }
+.btn[aria-pressed="true"] { background: #e4d5ba; box-shadow: inset 0 0 0 1.5px var(--ink); }
+.btn[aria-pressed="true"]:not(#mute)::before { content: "✓"; font-weight: 800; }
+.btn.small { min-height: 44px; padding: .4rem .75rem; font-size: .88rem; }
+.btn .sq { width: .7em; height: .7em; background: currentColor; border-radius: 1px; }
+.btn code { font: 600 .85em var(--mono); opacity: .85; }
+
+/* scene tabs */
+.tabs ol { list-style: none; display: flex; gap: .3rem; margin: 0 auto; padding: .5rem 1rem 0; max-width: 68rem; }
+.tabs a { display: flex; align-items: center; justify-content: center; gap: .35rem; min-width: 44px; min-height: 44px;
+  padding: 0 .55rem; border-radius: .6rem; color: var(--soft); text-decoration: none; font-weight: 600; font-size: .9rem; }
+.tabs a b { font: 700 1rem var(--mono); }
+.tabs a[aria-current="page"] { background: var(--ink); color: var(--bg); }
+@media (max-width: 26rem) { .btn code { display: none; } }
+@media (max-width: 40rem) { .tabs a span { display: none; } .step { display: none; } :root { --fh: 2.6rem; --open: 2.6rem; } }
+
+/* scene layout */
+main { max-width: 68rem; margin: 0 auto; padding: .75rem 1rem 2.5rem; }
+.scene { display: grid; gap: .85rem 2.5rem; grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "head" "lead" "stage" "after" "more" "pager"; }
+.head { grid-area: head; } .lead { grid-area: lead; } .stage { grid-area: stage; min-width: 0; }
+.after { grid-area: after; } .more { grid-area: more; } .pager { grid-area: pager; }
+@media (min-width: 58rem) {
+  .scene { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); grid-template-rows: auto auto auto 1fr auto;
+    grid-template-areas: "head stage" "lead stage" "after stage" "more stage" "pager pager"; align-items: start; }
+  .lead { max-width: 34rem; } .after { max-width: 34rem; }
+}
+.step { margin: 0 0 .15rem; font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--soft); }
+.lead p:last-child, .after p:last-child { margin-bottom: 0; }
+.intro { color: var(--soft); font-size: .95rem; }
+.try { background: var(--card); border-left: 4px solid var(--ink); padding: .6rem .8rem; border-radius: 0 .5rem .5rem 0; }
+.note, .aside { font-size: .92rem; color: var(--soft); }
+ol.steps { margin: 0 0 .7rem; padding-left: 1.4rem; } ol.steps li { margin-bottom: .25rem; }
+.say { min-height: 3em; margin: .55rem 0 .5rem; font-size: .98rem; }
+.ctrl { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.ctrl + .ctrl { margin-top: .5rem; }
+.ctrl .lbl { font-size: .85rem; color: var(--soft); margin-right: .1rem; }
+.legend { margin: .35rem 0 -.2rem; font-size: .8rem; color: var(--soft); text-align: center; }
+.recipes { display: grid; grid-template-columns: auto 1fr; gap: .1rem 1rem; margin: 0 0 .7rem; padding: .55rem .8rem;
+  background: var(--card); border: 1px solid var(--line); border-radius: .5rem; font-size: .95rem; }
+.recipes dt { font-weight: 700; } .recipes dd { margin: 0; font-family: var(--mono); }
+details.more { border-top: 1px solid var(--line); padding-top: .4rem; font-size: .93rem; color: var(--soft); }
+details.more summary { cursor: pointer; font-weight: 600; color: var(--ink); min-height: 44px; display: flex; align-items: center; }
+.pager { display: flex; justify-content: space-between; gap: .5rem; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 1rem; }
+
+/* fretboard */
+.fb { width: 100%; max-width: 26rem; margin: 0 auto .6rem; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.fb-top, .fb-neck, .fb-layer, .fb-table { display: grid; grid-template-columns: var(--gut) repeat(6, minmax(0, 1fr)); }
+.fb-neck, .fb-layer { grid-template-rows: var(--open) repeat(7, var(--fh)) var(--tail); }
+.fb-neck { position: relative; touch-action: manipulation; }
+.fb-layer { position: absolute; inset: 0; pointer-events: none; }
+.fb-bg { z-index: 0; } .fb-dots { z-index: 2; }
+.fb-row { display: contents; }
+.fb-gc { position: relative; z-index: 1; display: grid; min-width: 0; }
+.fb-gl { grid-column: 1; align-self: center; font-size: .66rem; line-height: 1.1; color: var(--soft); text-align: center; }
+.fb-shape { text-align: center; font: 700 1.45rem/1.4 var(--mono); }
+.fb-strum { grid-row: 2; position: relative; margin: 0 .9rem .15rem; border-bottom: 2px solid var(--ink); font-size: .7rem; text-align: center; line-height: 1.2; }
+.fb-strum::after { content: ""; position: absolute; right: -2px; bottom: -6px; border: 5px solid transparent; border-left: 8px solid var(--ink); border-right: 0; }
+.fb-lane { grid-row: 3; text-align: center; line-height: 1.1; padding-bottom: .3rem; }
+.fb-lane b { display: block; font: 700 1rem/1.2 var(--mono); }
+.fb-lane small { font-size: .66rem; color: var(--soft); }
+.fb-fn { grid-column: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font: 700 .95rem/1 var(--mono); color: var(--soft); }
+.fb-fn small { font: 500 .62rem/1.1 system-ui, sans-serif; margin-top: 2px; }
+.wood { grid-column: 2 / -1; grid-row: 2 / 9; background: linear-gradient(90deg, var(--wood-d), var(--wood) 14%, var(--wood) 86%, var(--wood-d)); }
+.tailwood { grid-column: 2 / -1; grid-row: 9; background: linear-gradient(var(--wood), rgba(59, 42, 30, 0)); }
+.nut { grid-column: 2 / -1; grid-row: 2; align-self: start; height: 8px; margin: -4px -3px 0; border-radius: 2px; background: linear-gradient(#fdf8ee, #d9ccb2); box-shadow: 0 1px 2px rgba(0, 0, 0, .4); }
+.wire { grid-column: 2 / -1; align-self: end; height: 4px; margin-bottom: -2px; border-radius: 2px; background: linear-gradient(#f4f1eb, #99938a); }
+.hmode .inlay { display: none; }
+.inlay { grid-column: 2 / -1; place-self: center; width: .8rem; height: .8rem; border-radius: 50%; background: #e9dec7; opacity: .45; }
+.str { justify-self: center; grid-row: 1 / -1; width: var(--w); border-radius: 3px; box-shadow: 1px 0 1px rgba(0, 0, 0, .35); }
+.str.wound { background: repeating-linear-gradient(0deg, #876a3d 0 1px, #d4b47f 1px 3px); }
+.str.plain { background: linear-gradient(90deg, #6f6f6f, #f2f2f2 45%, #6f6f6f); }
+.str.mute { opacity: .28; }
+.l1 { --w: 6px; } .l2 { --w: 5px; } .l3 { --w: 4.2px; } .l4 { --w: 3.4px; } .l5 { --w: 2.6px; } .l6 { --w: 2px; }
+.vib { justify-self: center; width: calc(var(--w) + 6px); border-radius: 6px; background: var(--glow); box-shadow: 0 0 12px 4px rgba(255, 176, 32, .55); opacity: 0; }
+.vib.chk { background: #e9e2d6; box-shadow: none; }
+.cell { all: unset; box-sizing: border-box; position: relative; display: grid; place-items: center; width: 100%; height: 100%; min-height: 44px; border-radius: 10px; cursor: pointer; }
+.cell:focus-visible { outline: 3px solid #ffd35a; outline-offset: -3px; }
+.r0 .cell:focus-visible { outline-color: var(--focus); }
+.cell .h { position: relative; z-index: 1; font: 700 .74rem/1 var(--mono); color: #f6ead3; background: rgba(42, 29, 20, .9); padding: 2px 3px; border-radius: 4px; }
+.r0 .cell .h { color: var(--ink); background: rgba(244, 239, 230, .92); }
+.cell.same::after, .cell.twin::after { content: ""; position: absolute; left: 50%; top: 50%; width: min(2.5rem, 88%); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 3px solid var(--glow); }
+.cell.twin::after { border-style: dashed; }
+.r0 .cell.same::after, .r0 .cell.twin::after { border-color: var(--glow-ink); }
+.dot, .ghost, .mark, .tap { place-self: center; display: grid; place-items: center; width: min(2.35rem, 84%); aspect-ratio: 1; border-radius: 50%; font: 800 .95rem/1 system-ui, sans-serif; }
+.dot { background: var(--dot); color: var(--ink); box-shadow: 0 2px 5px rgba(0, 0, 0, .5); }
+.dot.open { width: min(1.45rem, 58%); background: transparent; border: 3px solid var(--ink); box-shadow: none; }
+.dot.mute { background: none; box-shadow: none; color: var(--soft); font-size: 1.4rem; font-weight: 500; }
+.dot.chg { box-shadow: 0 0 0 3px var(--wood), 0 0 0 6px var(--chg); }
+.dot.open.chg { border-color: var(--chg-ink); box-shadow: 0 0 0 3px var(--chg); }
+.ghost { border: 2.5px dashed rgba(251, 245, 232, .7); }
+.ghost.chg { border-color: var(--chg); }
+.ghost.next { border-color: var(--glow); }
+.mark { position: relative; z-index: 1; background: var(--glow); color: #241600; border: 2px solid var(--ink); }
+.tap { background: rgba(251, 245, 232, .85); box-shadow: 0 2px 5px rgba(0, 0, 0, .45); }
+.tap.open { width: min(1.45rem, 58%); background: transparent; border: 3px solid var(--ink); box-shadow: none; }
+.hit { animation: hit .3s ease-out; }
+@keyframes hit { from { transform: scale(1.28); } to { transform: scale(1); } }
+.fb-table { margin-top: .35rem; border-top: 1px solid var(--line); padding-top: .25rem; }
+.fb-tv { text-align: center; font: 700 .95rem/1.7 var(--mono); }
+.fb-tv.root { color: var(--glow-ink); }
+.fb-shape.chg, .fb-tv.chg { background: #d5f3f5; color: var(--chg-ink); border-radius: .35rem; }
+
+/* scene 6 */
+.now { display: flex; align-items: baseline; gap: .6rem; min-height: 2.6rem; margin: .5rem 0; }
+.now b { font: 700 1.6rem/1 var(--serif); min-width: 5.5ch; }
+.now span { font-size: .95rem; color: var(--soft); }
+ol.prog { list-style: none; margin: 0 0 .6rem; padding: 0; display: grid; gap: .25rem; }
+ol.prog li { display: grid; grid-template-columns: 6.6rem repeat(4, minmax(0, 1fr)); gap: .25rem; align-items: center; }
+.prog .ps { font: 700 .88rem/1 var(--mono); white-space: nowrap; }
+.prog .bt { text-align: center; font-size: .78rem; padding: .35rem 0; border-radius: .4rem; background: var(--card); border: 1px solid var(--line); }
+.prog .bt.now6 { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+dl.acts { margin: 0 0 .7rem; display: grid; grid-template-columns: auto 1fr; gap: .3rem .8rem; }
+dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
+
+@media (hover: hover) {
+  .btn:not(.primary):not([aria-pressed="true"]):hover { background: #fff; } .btn.primary:hover { background: #3a332b; }
+  .tabs a:hover:not([aria-current]) { background: rgba(30, 26, 21, .07); }
+  .cell:hover { background: rgba(255, 255, 255, .08); } .r0 .cell:hover { background: rgba(30, 26, 21, .07); }
+}
+@media (prefers-reduced-motion: reduce) { .hit { animation: none; } }
+@media print { .bar, .tabs, .ctrl, .pager { display: none !important; } .scene[hidden] { display: grid !important; break-before: page; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand"><b>Six</b><span>experimental method · synthesized practice tones</span></div>
+  <button class="btn small" id="stop" type="button"><span class="sq" aria-hidden="true"></span>Stop</button>
+  <button class="btn small" id="mute" type="button" aria-pressed="false" aria-label="Mute practice tones">Mute</button>
+</header>
+<nav class="tabs" aria-label="Scenes">
+  <ol>
+    <li><a href="#1" aria-label="Scene 1: Tap a string"><b>1</b><span>Tap</span></a></li>
+    <li><a href="#2" aria-label="Scene 2: Build Bare"><b>2</b><span>Bare</span></a></li>
+    <li><a href="#3" aria-label="Scene 3: Same sound, different place"><b>3</b><span>Height</span></a></li>
+    <li><a href="#4" aria-label="Scene 4: One finger, Wide or Close"><b>4</b><span>Wide · Close</span></a></li>
+    <li><a href="#5" aria-label="Scene 5: Move the whole shape"><b>5</b><span>Move</span></a></li>
+    <li><a href="#6" aria-label="Scene 6: Play a progression"><b>6</b><span>Play</span></a></li>
+  </ol>
+</nav>
+<noscript><p style="padding:1rem">Six needs JavaScript for the fretboard and its practice tones.</p></noscript>
+
+<main>
+<!-- 1 -->
+<section class="scene" id="s1" aria-labelledby="h1" hidden>
+  <div class="head"><p class="step">Scene 1 of 6</p><h2 id="h1" tabindex="-1">Tap a string</h2></div>
+  <div class="lead">
+    <p class="intro">Six is an experimental way to learn a standard-tuned guitar by touch and sound. It is not an established method.</p>
+    <p>Each column is a <b>lane</b>: one string. Lane 1 is the thickest, lane 6 the thinnest. The board is the guitar's neck standing up, head at the top. When you hold the guitar, lane 1 is the string nearest your face.</p>
+  </div>
+  <div class="stage">
+    <div id="b1"></div>
+    <div class="ctrl">
+      <button class="btn" type="button" id="climb">Lane 1, frets 0 to 7</button>
+      <button class="btn" type="button" id="opens">Lanes 1 to 6, open</button>
+    </div>
+    <p class="say" id="say1" aria-live="polite">Tap row 0 to pluck a string open. Tap further down to press it at a fret.</p>
+  </div>
+  <div class="after">
+    <p><b>Open</b>, written 0, means you pluck the string without pressing it. The whole string vibrates, from the head to the bridge on the body.</p>
+    <p>A <b>fret</b> is the space between two metal wires. Press in one and the string touches the wire nearer the body, so only the part from there to the bridge vibrates: the glowing part. A shorter part sounds higher, so each fret further down the board sounds a little higher.</p>
+    <p class="aside">Guitar books usually number strings the other way: their string 1 is the thinnest. Six counts from the thick side.</p>
+    <p class="try"><b>On your guitar:</b> press with a fingertip inside the fret, close to the wire nearer the body but not on top of it. Pluck lane 1 open, then at frets 1, 2 and 3.</p>
+    <p class="note">The sounds are quiet synthesized practice tones, not recordings of a guitar. Nothing plays until you tap.</p>
+  </div>
+  <details class="more"><summary>Standard terms</summary>
+    <p>Lanes 1–6 are what guitar books call strings 6–1: low E, A, D, G, B, high E. "Open" and "fret" mean the same in both.</p>
+  </details>
+  <nav class="pager" aria-label="Scene"><span></span><a class="btn primary" href="#2">Next: your first chord →</a></nav>
+</section>
+
+<!-- 2 -->
+<section class="scene" id="s2" aria-labelledby="h2" hidden>
+  <div class="head"><p class="step">Scene 2 of 6</p><h2 id="h2" tabindex="-1">Build Bare</h2></div>
+  <div class="lead">
+    <p>A <b>shape</b> lists one fret per lane, thick to thin, like the row above the board: <b>0 2 2 – – –</b>. 0 means open. A dash means don't play that lane; the board marks it ×.</p>
+  </div>
+  <div class="stage">
+    <div id="b2"></div>
+    <div class="ctrl">
+      <button class="btn primary" type="button" id="strum2">Strum Bare</button>
+      <button class="btn" type="button" id="each2">One lane at a time</button>
+    </div>
+    <p class="say" id="say2" aria-live="polite">Lane 1 open. Lanes 2 and 3 at fret 2. Lanes 4, 5 and 6 stay silent.</p>
+  </div>
+  <div class="after">
+    <ol class="steps">
+      <li>Middle finger (M) on lane 2, fret 2.</li>
+      <li>Ring finger (R) on lane 3, fret 2.</li>
+      <li>Strum: sweep your thumb or a pick down across lanes 1, 2 and 3 in one motion. Stop before lane 4.</li>
+    </ol>
+    <p>Lanes played together make a <b>chord</b>. Six calls this one <b>Bare</b>. Lane 3 is a higher copy of lane 1, so Bare has just two different sounds. Scene 3 shows why.</p>
+    <p class="try"><b>On your guitar:</b> press with the very tips of your fingers. If a lane buzzes, press closer to the wire nearer the body.</p>
+  </div>
+  <details class="more"><summary>Standard terms</summary>
+    <p>Bare is a power chord; this one is E5. Chord charts mark "don't play" with × and "open" with o, the same as Six's – and 0.</p>
+  </details>
+  <nav class="pager" aria-label="Scene"><a class="btn" href="#1">← Back</a><a class="btn primary" href="#3">Next: same sound, different place →</a></nav>
+</section>
+
+<!-- 3 -->
+<section class="scene" id="s3" aria-labelledby="h3" hidden>
+  <div class="head"><p class="step">Scene 3 of 6</p><h2 id="h3" tabindex="-1">Same sound, different place</h2></div>
+  <div class="lead">
+    <p>A <b>position</b> is a lane plus a fret. Two different positions can make the same sound. Play A, then B.</p>
+  </div>
+  <div class="stage">
+    <div id="b3"></div>
+    <div class="ctrl">
+      <button class="btn" type="button" id="a3">A: lane 1, fret 5</button>
+      <button class="btn" type="button" id="bb3">B: lane 2, open</button>
+      <button class="btn primary" type="button" id="ab3">A, then B</button>
+      <button class="btn" type="button" id="tw3">B, then +12</button>
+    </div>
+    <p class="say" id="say3" aria-live="polite">Tap any spot to hear it and see where else it sounds.</p>
+  </div>
+  <div class="after">
+    <p>They make the same sound. Six gives every sound a number, its <b>Height</b>. Lane 1 open is Height 0, and every fret adds 1. Each lane starts at its own open Height, shown in row 0: 0, 5, 10, 15, 19, 24.</p>
+        <p>A is 0 + 5 = 5. B is 5 + 0 = 5. Same Height, same sound, different place.</p>
+    <p>Add 12 and you get the <b>higher twin</b>: the same sound, higher. B's twin is 5 + 12 = 17, at lane 4, fret 2 (15 + 2).</p>
+    <p class="aside">Lane 5 starts only 4 above lane 4. That is how standard tuning works.</p>
+    <p class="try"><b>On your guitar:</b> play lane 1 at fret 5, then lane 2 open. They should match. If they don't, the guitar needs tuning.</p>
+  </div>
+  <details class="more"><summary>Standard terms</summary>
+    <p>Height counts semitones (half steps) above low E. The same Height in two places is the same note, a unison. Twelve higher is one octave.</p>
+  </details>
+  <nav class="pager" aria-label="Scene"><a class="btn" href="#2">← Back</a><a class="btn primary" href="#4">Next: one finger →</a></nav>
+</section>
+
+<!-- 4 -->
+<section class="scene" id="s4" aria-labelledby="h4" hidden>
+  <div class="head"><p class="step">Scene 4 of 6</p><h2 id="h4" tabindex="-1">One finger: Wide or Close</h2></div>
+  <div class="lead">
+    <p>Wide and Close keep Bare's two fingers and strum all six lanes. Wide adds your index finger (I) on lane 4, fret 1. Lift it and you get Close.</p>
+    <p>Every chord has a <b>root</b>, the sound it is built from (here lane 1 open, Height 0), and a <b>recipe</b>: how far its other sounds sit above the root.</p>
+  </div>
+  <div class="stage">
+    <div id="b4"></div>
+    <div class="ctrl">
+      <button class="btn" type="button" id="wide4" aria-pressed="true">Wide <code>0 2 2 1 0 0</code></button>
+      <button class="btn" type="button" id="close4" aria-pressed="false">Close <code>0 2 2 0 0 0</code></button>
+    </div>
+    <div class="ctrl">
+      <button class="btn" type="button" id="flip4">Back and forth</button>
+      <button class="btn" type="button" id="diff4">Only the changed note</button>
+    </div>
+    <div class="ctrl">
+      <span class="lbl">Explore:</span>
+      <button class="btn small" type="button" id="bare4" aria-pressed="false">Bare</button>
+      <button class="btn small" type="button" id="float4" aria-pressed="false">Float</button>
+    </div>
+    <p class="say" id="say4" aria-live="polite"></p>
+  </div>
+  <div class="after">
+    <p>Recipe numbers are distances above the root, not frets. A twin is not a new sound, so keep taking 12 away until a distance is under 12.</p>
+    <dl class="recipes">
+      <dt>Bare</dt><dd>root +7</dd>
+      <dt>Wide</dt><dd>root +4 +7</dd>
+      <dt>Close</dt><dd>root +3 +7</dd>
+      <dt>Float</dt><dd>root +5 +7</dd>
+    </dl>
+    <p>Wide's lane 4 is Height 16: 16 − 12 = 4. Close's lane 4 is 15: 15 − 12 = 3. One fret changes the recipe.</p>
+    <p class="try"><b>On your guitar:</b> strum Wide, then lift only your index finger and strum again. Keep the other two fingers pressed.</p>
+  </div>
+  <details class="more"><summary>Standard terms</summary>
+    <p>Wide = major (E). Close = minor (Em). Float = sus4 (Esus4). Bare = power chord (E5). Recipe numbers are semitone intervals: 3 is a minor third, 4 a major third, 5 a perfect fourth, 7 a perfect fifth.</p>
+  </details>
+  <nav class="pager" aria-label="Scene"><a class="btn" href="#3">← Back</a><a class="btn primary" href="#5">Next: move a shape →</a></nav>
+</section>
+
+<!-- 5 -->
+<section class="scene" id="s5" aria-labelledby="h5" hidden>
+  <div class="head"><p class="step">Scene 5 of 6</p><h2 id="h5" tabindex="-1">Move the whole shape</h2></div>
+  <div class="lead">
+    <p>Move every lane you play by the same number of frets and the recipe stays the same. Only the root changes.</p>
+  </div>
+  <div class="stage">
+    <div id="b5"></div>
+    <div class="ctrl">
+      <button class="btn primary" type="button" id="move5">Move 3 5 5 two frets higher</button>
+      <button class="btn" type="button" id="strum5">Strum</button>
+    </div>
+    <div class="ctrl">
+      <span class="lbl">0 2 2 – – –, two frets higher:</span>
+      <button class="btn small" type="button" id="slip5">Fingers only</button>
+      <button class="btn small" type="button" id="all5">Every lane</button>
+    </div>
+    <p class="say" id="say5" aria-live="polite"></p>
+  </div>
+  <div class="after">
+    <p>Index on lane 1, fret 3. Ring on lane 2, fret 5. Pinky on lane 3, fret 5. Keep that hand shape and slide it two frets toward the body: 3 5 5 – – – becomes 5 7 7 – – –. Dashed circles show where your fingers were. Every Height rises by 2, so every distance above the root stays the same.</p>
+    <p>Open lanes are different. There is no finger on them to slide. In 0 2 2 – – –, moving only your fingers leaves lane 1 at Height 0 while lanes 2 and 3 rise, and the recipe breaks. To keep Bare, lane 1 has to move too. Use the 3 5 5 grip: index at fret 2, ring and pinky at fret 4, giving 2 4 4 – – –.</p>
+    <p class="try"><b>On your guitar:</b> make 3 5 5 – – –, strum, then ease the pressure and slide your whole hand two frets toward the body. Press and strum again.</p>
+  </div>
+  <details class="more"><summary>Standard terms</summary>
+    <p>Sliding a shape is called shifting, and it transposes the chord: 3 5 5 is G5, 5 7 7 is A5 and 2 4 4 is F♯5. A shape with no open strings is a "movable shape".</p>
+  </details>
+  <nav class="pager" aria-label="Scene"><a class="btn" href="#4">← Back</a><a class="btn primary" href="#6">Next: play a progression →</a></nav>
+</section>
+
+<!-- 6 -->
+<section class="scene" id="s6" aria-labelledby="h6" hidden>
+  <div class="head"><p class="step">Scene 6 of 6</p><h2 id="h6" tabindex="-1">Play a progression</h2></div>
+  <div class="lead">
+    <p>Four shapes, four slow beats each: Strike, Ring, Hush, Brush. Play along on your guitar.</p>
+  </div>
+  <div class="stage">
+    <div class="now"><b id="word6">Ready</b><span id="hint6">Press Play. Four ticks count you in.</span></div>
+    <div class="ctrl">
+      <button class="btn primary" type="button" id="play6">Play</button>
+      <button class="btn" type="button" id="top6">From the top</button>
+      <button class="btn" type="button" id="loop6" aria-pressed="true">Repeat</button>
+    </div>
+    <div id="b6"></div>
+    <ol class="prog" id="prog6" aria-label="Progression, four beats per shape"></ol>
+    <div class="ctrl" role="group" aria-label="Speed">
+      <span class="lbl">Speed:</span>
+      <button class="btn small" type="button" data-bpm="40" aria-pressed="false">Slowest</button>
+      <button class="btn small" type="button" data-bpm="52" aria-pressed="true">Slow</button>
+      <button class="btn small" type="button" data-bpm="66" aria-pressed="false">Steady</button>
+      <span class="lbl" id="bpm6">52 beats a minute</span>
+    </div>
+  </div>
+  <div class="after">
+    <dl class="acts">
+      <dt>Strike</dt><dd>Strum the shape once. A sound starts.</dd>
+      <dt>Ring</dt><dd>Keep pressing and don't strum. The sound keeps going.</dd>
+      <dt>Hush</dt><dd>Ease off so your fingers just touch the strings without pressing. In 0 2 2 – – –, let one finger rest on lane 1 too. The sound stops.</dd>
+      <dt>Brush</dt><dd>Strum while still hushed: a dry "chk", no notes. Then press the next shape.</dd>
+    </dl>
+    <p class="try"><b>On your guitar:</b> start at Slowest. Say the four words out loud as you play.</p>
+  </div>
+  <details class="more"><summary>Standard terms</summary>
+    <p>E5 → G5 → A5 → E5, one bar of 4/4 each. Strike = strum, Ring = let ring (sustain), Hush = fretting-hand mute, Brush = muted strum, often called a "chuck" or "scratch".</p>
+  </details>
+  <nav class="pager" aria-label="Scene"><a class="btn" href="#5">← Back</a><a class="btn" href="#1">Start again from scene 1</a></nav>
+</section>
+</main>
+
+<script>
+'use strict';
+const $ = (s, el = document) => el.querySelector(s);
+const on = (s, fn) => $(s).addEventListener('click', fn);
+
+/* ---------- The Six model ---------- */
+const BASE_HZ = 82.406889;              // Height 0: lane 1 open (low E)
+const OPEN = [0, 5, 10, 15, 19, 24];    // open Heights, lanes 1-6
+const hz = h => BASE_HZ * 2 ** (h / 12);
+const S = {
+  bare:  { frets: [0, 2, 2, null, null, null], fingers: [null, 'M', 'R'] },
+  wide:  { frets: [0, 2, 2, 1, 0, 0],          fingers: [null, 'M', 'R', 'I'] },
+  close: { frets: [0, 2, 2, 0, 0, 0],          fingers: [null, 'M', 'R'] },
+  float: { frets: [0, 2, 2, 2, 0, 0],          fingers: [null, 'M', 'R', 'P'] },
+  bare3: { frets: [3, 5, 5, null, null, null], fingers: ['I', 'R', 'P'] },
+  bare5: { frets: [5, 7, 7, null, null, null], fingers: ['I', 'R', 'P'] },
+  slip:  { frets: [0, 4, 4, null, null, null], fingers: [null, 'M', 'R'] },
+  bare2: { frets: [2, 4, 4, null, null, null], fingers: ['I', 'R', 'P'] },
+};
+const RECIPES = { Bare: [7], Wide: [4, 7], Close: [3, 7], Float: [5, 7] };
+const shapeText = s => s.frets.map(f => f == null ? '–' : f).join(' ');
+const heights = s => s.frets.map((f, l) => f == null ? null : OPEN[l] + f);
+const posName = (l, f) => `Lane ${l + 1}, ${f ? 'fret ' + f : 'open'}`;
+function recipe(s) {
+  const hs = heights(s).filter(h => h != null), root = Math.min(...hs);
+  const ds = [...new Set(hs.map(h => (h - root) % 12))].filter(Boolean).sort((a, b) => a - b);
+  const name = Object.keys(RECIPES).find(k => RECIPES[k].join() === ds.join()) || null;
+  return { root, ds, name, text: 'root ' + ds.map(d => '+' + d).join(' ') };
+}
+function describe(s) {
+  const hs = heights(s).filter(h => h != null), r = recipe(s);
+  const ups = [...new Set(hs.map(h => h - r.root).filter(Boolean))].map(d => '+' + d).join(', ');
+  return `${shapeText(s)}: Heights ${hs.join(' · ')}. Root ${r.root}, then ${ups}. ` +
+    (r.name ? `Recipe ${r.text}: ${r.name}.` : `Recipe ${r.text}: not Bare any more.`);
+}
+
+/* ---------- Sound ---------- */
+const VOL = 0.5;
+const E = { ctx: null, master: null, muted: false, voices: new Set(), lanes: new Map(), timers: new Set(), gen: 0, hooks: [] };
+
+function ac() {
+  if (!E.ctx) {
+    const C = window.AudioContext || window.webkitAudioContext;
+    const c = E.ctx = new C({ latencyHint: 'interactive' });
+    const comp = c.createDynamicsCompressor();
+    comp.threshold.value = -18; comp.knee.value = 12; comp.ratio.value = 3; comp.attack.value = 0.004; comp.release.value = 0.25;
+    E.master = c.createGain();
+    E.master.gain.value = E.muted ? 0 : VOL;
+    E.master.connect(comp);
+    comp.connect(c.destination);
+    const n = 24, re = new Float32Array(n + 1), im = new Float32Array(n + 1);
+    for (let k = 1; k <= n; k++) im[k] = Math.sin(k * Math.PI * 0.21) / k ** 1.15;   // plucked-string spectrum
+    E.wave = c.createPeriodicWave(re, im);
+    E.noise = c.createBuffer(1, c.sampleRate, c.sampleRate);
+    const d = E.noise.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  if (E.ctx.state !== 'running') E.ctx.resume().catch(() => {});
+  return E.ctx;
+}
+async function ready() {
+  const c = ac();
+  if (c.state !== 'running') { try { await c.resume(); } catch (e) {} }
+  return c;
+}
+function wait(ms, fn) {
+  const id = setTimeout(() => { E.timers.delete(id); fn(); }, Math.max(0, ms));
+  E.timers.add(id);
+}
+// Run fn when audio scheduled at time t reaches the speakers.
+function atTime(t, fn) {
+  const c = E.ctx, lat = c.outputLatency || c.baseLatency || 0;
+  wait((t + lat - c.currentTime) * 1000, fn);
+}
+
+// One plucked practice tone at Height h, starting at audio time t.
+function voice(h, t, vel = 1) {
+  const c = E.ctx, f = hz(h), tau = 1.9 - h * 0.022;
+  const o = c.createOscillator();
+  o.setPeriodicWave(E.wave);
+  o.frequency.value = f;
+  const lp = c.createBiquadFilter();
+  lp.type = 'lowpass'; lp.Q.value = 0.6;
+  lp.frequency.setValueAtTime(Math.min(f * 20, 7000), t);
+  lp.frequency.setTargetAtTime(Math.max(f * 3, 400), t + 0.01, 0.4);
+  const g = c.createGain(), peak = 0.24 * vel;
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(peak, t + 0.004);
+  g.gain.setTargetAtTime(peak * 0.5, t + 0.004, 0.12);
+  g.gain.setTargetAtTime(0, t + 0.35, tau);
+  o.connect(lp); lp.connect(g); g.connect(E.master);
+  const v = { o, g, h, f, start: t, relT: null, fade: 0.35 + tau * 2 };
+  o.start(t);
+  o.stop(t + 0.35 + tau * 5.5);
+  o.onended = () => { E.voices.delete(v); if (v.view) v.view.b.dark(v.view.l, v); try { g.disconnect(); } catch (e) {} };
+  E.voices.add(v);
+  return v;
+}
+// End a sound at audio time t with a short fade.
+function release(v, t, r = 0.02) {
+  const c = E.ctx;
+  t = Math.max(t, c.currentTime);
+  if (v.relT != null && v.relT <= t) return;
+  v.relT = t;
+  const g = v.g.gain;
+  if (g.cancelAndHoldAtTime) g.cancelAndHoldAtTime(t);
+  else { g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); }
+  g.setTargetAtTime(0, t, r);
+  try { v.o.stop(t + r * 10); } catch (e) {}
+  if (v.view) atTime(t, () => v.view.b.dark(v.view.l, v));
+}
+const live = (v, t) => v.relT == null || v.relT > t;
+function hushAll(t) { E.voices.forEach(v => { if (!v.brush && live(v, t)) release(v, t, 0.02); }); }
+
+// Play lane l at fret f on board b. One sound per lane, like a real string.
+function note(b, l, f, t) {
+  const key = b.id + ':' + l, prev = E.lanes.get(key);
+  if (prev && live(prev, t)) release(prev, t, 0.012);
+  const v = voice(OPEN[l] + f, t);
+  v.view = { b, l, f };
+  E.lanes.set(key, v);
+  atTime(t, () => b.light(l, f, v));
+  return v;
+}
+function strum(b, s, t, gap = 0.02) {
+  let i = 0;
+  s.frets.forEach((f, l) => { if (f != null) note(b, l, f, t + gap * i++); });
+}
+// A muted strum: short noise ticks, no pitched notes.
+function brush(t, lanes) {
+  const c = E.ctx;
+  lanes.forEach((l, i) => {
+    const ti = t + i * 0.012;
+    const s = c.createBufferSource();
+    s.buffer = E.noise;
+    const bp = c.createBiquadFilter();
+    bp.type = 'bandpass'; bp.frequency.value = 900 + l * 300; bp.Q.value = 1.6;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0, ti);
+    g.gain.linearRampToValueAtTime(0.6, ti + 0.002);
+    g.gain.setTargetAtTime(0, ti + 0.002, 0.016);
+    s.connect(bp); bp.connect(g); g.connect(E.master);
+    const v = { o: s, g, start: ti, relT: null, brush: true };
+    s.start(ti, Math.random() * 0.8, 0.12);
+    s.onended = () => { E.voices.delete(v); try { g.disconnect(); } catch (e) {} };
+    E.voices.add(v);
+  });
+}
+function tick(t, accent) {
+  const c = E.ctx, o = c.createOscillator(), g = c.createGain();
+  o.frequency.value = accent ? 1760 : 1320;
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(0.12, t + 0.002);
+  g.gain.setTargetAtTime(0, t + 0.002, 0.018);
+  o.connect(g); g.connect(E.master);
+  const v = { o, g, start: t, relT: null, brush: true };
+  o.start(t); o.stop(t + 0.12);
+  o.onended = () => { E.voices.delete(v); try { g.disconnect(); } catch (e) {} };
+  E.voices.add(v);
+}
+// Stop everything now, including anything scheduled but not yet heard.
+function stopAll(reason = 'stop') {
+  E.gen++;
+  E.timers.forEach(clearTimeout);
+  E.timers.clear();
+  if (E.ctx) {
+    const t = E.ctx.currentTime;
+    E.voices.forEach(v => {
+      if (v.start > t + 0.003) { try { v.g.disconnect(); } catch (e) {} try { v.o.stop(); } catch (e) {} E.voices.delete(v); }
+      else release(v, t, 0.008);
+    });
+  }
+  E.lanes.clear();
+  boards.forEach(b => b.darkAll());
+  E.hooks.forEach(fn => fn(reason));
+}
+// Wrap a button action: stop what is playing, unlock audio, then schedule from time t.
+function act(fn) {
+  return async () => {
+    stopAll('new');
+    const g = E.gen;
+    await ready();
+    if (g === E.gen) fn(E.ctx.currentTime + 0.05);
+  };
+}
+async function tapNote(b, l, f, after) {
+  const g = E.gen;
+  await ready();
+  if (g !== E.gen) return;
+  note(b, l, f, E.ctx.currentTime + 0.01);
+  if (after) after();
+}
+
+/* ---------- Fretboard ---------- */
+const FRETS = 7, MOVE_MS = 700;
+const boards = [];
+const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+function mk(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+function put(e, col, row) { e.style.gridColumn = col; e.style.gridRow = row; return e; }
+
+function Board(host, opt = {}) {
+  const b = { id: boards.length + 1, shape: null, owner: [], onTap: null };
+  boards.push(b);
+  host.classList.add('fb');
+  if (opt.heights) host.classList.add('hmode');
+
+  const top = mk('div', 'fb-top');
+  if (opt.shape) {
+    top.append(put(mk('span', 'fb-gl', 'shape'), 1, 1));
+    b.shapeCells = OPEN.map((_, l) => top.appendChild(put(mk('span', 'fb-shape'), l + 2, 1)));
+    b.strum = top.appendChild(mk('span', 'fb-strum', 'strum'));
+  }
+  top.append(put(mk('span', 'fb-gl', 'lane'), 1, 3));
+  OPEN.forEach((_, l) => {
+    const c = put(mk('span', 'fb-lane'), l + 2, 3);
+    c.innerHTML = `<b>${l + 1}</b>` + (l === 0 ? '<small>thick</small>' : l === 5 ? '<small>thin</small>' : '');
+    top.append(c);
+  });
+
+  const neck = mk('div', 'fb-neck');
+  neck.setAttribute('role', 'grid');
+  neck.setAttribute('aria-label', 'Fretboard. Lanes 1 to 6 run left to right, thick to thin. Frets 0 to 7 run top to bottom. Use arrow keys to move, Enter to play.');
+  const bg = mk('div', 'fb-layer fb-bg');
+  bg.setAttribute('aria-hidden', 'true');
+  bg.append(mk('i', 'wood'), mk('i', 'tailwood'), mk('i', 'nut'));
+  for (let f = 1; f <= FRETS; f++) bg.append(put(mk('i', 'wire'), '2 / -1', f + 1));
+  [3, 5, 7].forEach(f => bg.append(put(mk('i', 'inlay'), '2 / -1', f + 1)));
+  b.strings = OPEN.map((_, l) => bg.appendChild(put(mk('i', `str l${l + 1} ${l < 4 ? 'wound' : 'plain'}`), l + 2, '1 / -1')));
+  b.vibs = OPEN.map((_, l) => bg.appendChild(put(mk('i', `vib l${l + 1}`), l + 2, '2 / -1')));
+  neck.append(bg);
+
+  b.cells = OPEN.map(() => []);
+  for (let f = 0; f <= FRETS; f++) {
+    const row = mk('div', 'fb-row');
+    row.setAttribute('role', 'row');
+    const fn = put(mk('span', 'fb-fn'), 1, f + 1);
+    fn.setAttribute('role', 'rowheader');
+    fn.innerHTML = f ? String(f) : '0<small>open</small>';
+    row.append(fn);
+    OPEN.forEach((o, l) => {
+      const gc = put(mk('span', 'fb-gc' + (f ? '' : ' r0')), l + 2, f + 1);
+      gc.setAttribute('role', 'gridcell');
+      const c = mk('button', 'cell');
+      c.type = 'button';
+      c.tabIndex = l === 0 && f === 0 ? 0 : -1;
+      c.dataset.l = l; c.dataset.f = f;
+      c.setAttribute('aria-label', posName(l, f) + (opt.heights ? `, Height ${o + f}` : ''));
+      if (opt.heights) c.append(mk('span', 'h', o + f));
+      gc.append(c); row.append(gc);
+      b.cells[l][f] = c;
+    });
+    neck.append(row);
+  }
+  const dots = mk('div', 'fb-layer fb-dots');
+  dots.setAttribute('aria-hidden', 'true');
+  b.dots = OPEN.map((_, l) => { const d = mk('span', 'dot'); d.hidden = true; return dots.appendChild(d); });
+  b.taps = OPEN.map((_, l) => { const d = mk('span', 'tap'); d.hidden = true; return dots.appendChild(d); });
+  b.extra = mk('div');
+  b.extra.style.display = 'contents';
+  dots.append(b.extra);
+  neck.append(dots);
+  host.append(top, neck);
+
+  if (opt.table) {
+    const tb = mk('div', 'fb-table');
+    tb.append(put(mk('span', 'fb-gl', 'Height'), 1, 1), put(mk('span', 'fb-gl', 'above root'), 1, 2));
+    b.tH = OPEN.map((_, l) => tb.appendChild(put(mk('span', 'fb-tv'), l + 2, 1)));
+    b.tR = OPEN.map((_, l) => tb.appendChild(put(mk('span', 'fb-tv'), l + 2, 2)));
+    host.append(tb);
+  }
+  if (opt.fingers) host.append(mk('p', 'legend', 'Fingers: I index · M middle · R ring · P pinky'));
+
+  neck.addEventListener('keydown', e => {
+    const m = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    const c = e.target.closest('.cell');
+    if (!m || !c) return;
+    e.preventDefault();
+    const l = Math.max(0, Math.min(5, +c.dataset.l + m[0])), f = Math.max(0, Math.min(FRETS, +c.dataset.f + m[1]));
+    c.tabIndex = -1;
+    b.cells[l][f].tabIndex = 0;
+    b.cells[l][f].focus();
+  });
+  neck.addEventListener('click', e => {
+    const c = e.target.closest('.cell');
+    if (!c) return;
+    b.cells.flat().forEach(x => { x.tabIndex = -1; });
+    c.tabIndex = 0;
+    const l = +c.dataset.l, f = +c.dataset.f;
+    if (b.onTap) b.onTap(l, f); else tapNote(b, l, f);
+  });
+
+  // Show a shape's finger positions. animate: slide dots from where they were.
+  b.setShape = (s, o = {}) => {
+    const before = o.animate && !reduced() ? b.dots.map(d => d.hidden ? null : d.getBoundingClientRect()) : null;
+    b.shape = s;
+    b.extra.replaceChildren();
+    s.frets.forEach((f, l) => {
+      const d = b.dots[l];
+      d.getAnimations().forEach(a => a.cancel());
+      d.hidden = false;
+      d.className = 'dot';
+      d.textContent = '';
+      if (f == null) { d.classList.add('mute'); d.textContent = '×'; put(d, l + 2, 1); }
+      else if (f === 0) { d.classList.add('open'); put(d, l + 2, 1); }
+      else { d.textContent = (s.fingers && s.fingers[l]) || ''; put(d, l + 2, f + 1); }
+      b.strings[l].classList.toggle('mute', f == null);
+      if (b.shapeCells) b.shapeCells[l].textContent = f == null ? '–' : f;
+      b.taps[l].hidden = true;
+    });
+    if (b.strum) {
+      const ls = s.frets.map((f, l) => f == null ? -1 : l).filter(l => l >= 0);
+      b.strum.style.gridColumn = `${ls[0] + 2} / ${ls[ls.length - 1] + 3}`;
+    }
+    if (o.ghosts) o.ghosts.forEach(([l, f, cls]) => b.extra.append(put(mk('span', 'ghost ' + (cls || '')), l + 2, f + 1)));
+    b.dots.forEach((d, l) => d.classList.toggle('chg', o.change === l));
+    [b.shapeCells, b.tH, b.tR].forEach(row => row && row.forEach((c, l) => c.classList.toggle('chg', o.change === l)));
+    if (b.tH) {
+      const r = recipe(s);
+      heights(s).forEach((h, l) => {
+        b.tH[l].textContent = h == null ? '–' : h;
+        const d = h == null ? '–' : (h - r.root) % 12;
+        b.tR[l].textContent = d;
+        b.tR[l].classList.toggle('root', d === 0);
+      });
+    }
+    if (before) b.dots.forEach((d, l) => {
+      const a = before[l];
+      if (!a) return;
+      const z = d.getBoundingClientRect();
+      const dx = a.left + a.width / 2 - (z.left + z.width / 2), dy = a.top + a.height / 2 - (z.top + z.height / 2);
+      if (Math.abs(dx) + Math.abs(dy) > 1) d.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: o.ms || MOVE_MS, easing: 'cubic-bezier(.45, .05, .25, 1)' });
+    });
+  };
+  b.addMarks = list => list.forEach(([l, f, t]) => b.extra.append(put(mk('span', 'mark', t), l + 2, f + 1)));
+  b.highlight = h => b.cells.forEach((col, l) => col.forEach((c, f) => {
+    const x = OPEN[l] + f;
+    c.classList.toggle('same', h != null && x === h);
+    c.classList.toggle('twin', h != null && x !== h && (x - h) % 12 === 0);
+  }));
+  // The glowing part of a string is the part that vibrates: from the pressed fret wire toward the body.
+  b.light = (l, f, v) => {
+    b.owner[l] = v;
+    const g = b.vibs[l];
+    g.classList.remove('chk');
+    g.style.gridRow = `${f + 2} / -1`;
+    g.style.transition = 'none';
+    g.style.opacity = 1;
+    void g.offsetWidth;
+    g.style.transition = `opacity ${v.fade}s linear`;
+    g.style.opacity = 0.2;
+    const d = b.dots[l], onShape = b.shape && b.shape.frets[l] === f;
+    const t = b.taps[l];
+    t.hidden = onShape;
+    if (!onShape) { t.className = 'tap' + (f ? '' : ' open'); put(t, l + 2, f + 1); }
+    const p = onShape ? d : t;
+    if (!reduced()) { p.classList.remove('hit'); void p.offsetWidth; p.classList.add('hit'); }
+  };
+  b.dark = (l, v) => {
+    if (v && b.owner[l] !== v) return;
+    b.owner[l] = null;
+    const g = b.vibs[l];
+    g.style.transition = 'opacity .08s';
+    g.style.opacity = 0;
+    b.taps[l].hidden = true;
+  };
+  b.darkAll = () => OPEN.forEach((_, l) => b.dark(l));
+  b.chk = lanes => lanes.forEach(l => {
+    const g = b.vibs[l];
+    g.classList.add('chk');
+    g.style.gridRow = '2 / -1';
+    g.style.transition = 'none';
+    g.style.opacity = 0.9;
+    void g.offsetWidth;
+    g.style.transition = 'opacity .25s';
+    g.style.opacity = 0;
+  });
+  return b;
+}
+const lanesOf = s => s.frets.map((f, l) => f == null ? -1 : l).filter(l => l >= 0);
+
+/* ---------- Scene 1: tap a string ---------- */
+const b1 = Board($('#b1'));
+const say1 = (l, f) => { $('#say1').textContent = f ? `${posName(l, f)}: ${f} fret${f > 1 ? 's' : ''} higher than lane ${l + 1} open.` : `${posName(l, 0)}: nothing pressed, so the whole string vibrates.`; };
+b1.onTap = (l, f) => tapNote(b1, l, f, () => say1(l, f));
+on('#climb', act(t => { for (let f = 0; f <= FRETS; f++) { const tf = t + f * 0.55; note(b1, 0, f, tf); atTime(tf, () => say1(0, f)); } }));
+on('#opens', act(t => { for (let l = 0; l < 6; l++) { const tl = t + l * 0.65; note(b1, l, 0, tl); atTime(tl, () => say1(l, 0)); } }));
+
+/* ---------- Scene 2: build Bare ---------- */
+const b2 = Board($('#b2'), { shape: true, fingers: true });
+b2.setShape(S.bare);
+on('#strum2', act(t => strum(b2, S.bare, t)));
+on('#each2', act(t => lanesOf(S.bare).forEach((l, i) => {
+  const tl = t + i * 0.9;
+  note(b2, l, S.bare.frets[l], tl);
+  atTime(tl, () => { $('#say2').textContent = `${posName(l, S.bare.frets[l])}.`; });
+})));
+
+/* ---------- Scene 3: same sound, different place ---------- */
+const b3 = Board($('#b3'), { heights: true });
+b3.addMarks([[0, 5, 'A'], [1, 0, 'B']]);
+const say3 = (l, f, extra) => {
+  const h = OPEN[l] + f;
+  b3.highlight(h);
+  $('#say3').textContent = extra || `${posName(l, f)}: ${OPEN[l]} + ${f} = Height ${h}. Solid rings: same Height. Dashed rings: twins, 12 or 24 apart.`;
+};
+b3.onTap = (l, f) => tapNote(b3, l, f, () => say3(l, f));
+on('#a3', act(t => { note(b3, 0, 5, t); atTime(t, () => say3(0, 5)); }));
+on('#bb3', act(t => { note(b3, 1, 0, t); atTime(t, () => say3(1, 0)); }));
+on('#ab3', act(t => {
+  release(note(b3, 0, 5, t), t + 1.2);
+  atTime(t, () => say3(0, 5, 'A: lane 1, fret 5. Height 0 + 5 = 5.'));
+  note(b3, 1, 0, t + 1.4);
+  atTime(t + 1.4, () => say3(1, 0, 'B: lane 2, open. Height 5 + 0 = 5. Same Height as A, so the same sound.'));
+}));
+on('#tw3', act(t => {
+  release(note(b3, 1, 0, t), t + 1.2);
+  atTime(t, () => say3(1, 0, 'B: lane 2, open. Height 5.'));
+  note(b3, 3, 2, t + 1.4);
+  atTime(t + 1.4, () => say3(3, 2, 'Lane 4, fret 2: 15 + 2 = Height 17, which is 5 + 12. B\'s higher twin: the same sound, higher.'));
+}));
+
+/* ---------- Scene 4: one finger ---------- */
+const b4 = Board($('#b4'), { shape: true, table: true, fingers: true });
+const SAY4 = {
+  wide: 'Wide: root +4 +7. Your index finger puts lane 4 at Height 16: 16 − 12 = 4 above the root.',
+  close: 'Close: root +3 +7. The index finger has lifted (dashed ring), so lane 4 sounds open at Height 15: 15 − 12 = 3.',
+  bare: 'Bare: root +7. Only lanes 1 to 3 play: Heights 0, 7 and 12, and 12 is the root\'s twin.',
+  float: 'Float: root +5 +7. Lane 4 at fret 2 is Height 17: 17 − 12 = 5 above the root.',
+};
+const chips4 = { wide: '#wide4', close: '#close4', bare: '#bare4', float: '#float4' };
+function set4(k) {
+  b4.setShape(S[k], { change: k === 'bare' ? null : 3, ghosts: k === 'close' ? [[3, 1, 'chg']] : null });
+  Object.entries(chips4).forEach(([n, sel]) => $(sel).setAttribute('aria-pressed', String(n === k)));
+  $('#say4').textContent = SAY4[k];
+}
+set4('wide');
+Object.entries(chips4).forEach(([k, sel]) => on(sel, act(t => { set4(k); strum(b4, S[k], t); })));
+on('#flip4', act(t => ['wide', 'close', 'wide', 'close'].forEach((k, i) => {
+  const tk = t + i * 2;
+  if (i) atTime(tk, () => set4(k)); else set4(k);
+  strum(b4, S[k], tk);
+})));
+on('#diff4', act(t => {
+  set4('wide');
+  [[1, 'Lane 4, fret 1 (Wide): Height 16.'], [0, 'Lane 4, open (Close): Height 15. One fret lower.']].concat([[1, 'Height 16 again.'], [0, 'Height 15 again.']])
+    .forEach(([f, msg], i) => { const tf = t + i * 1.2; note(b4, 3, f, tf); atTime(tf, () => { $('#say4').textContent = msg; }); });
+}));
+
+/* ---------- Scene 5: move the shape ---------- */
+const b5 = Board($('#b5'), { shape: true, table: true, fingers: true });
+let cur5 = 'bare3';
+function set5(k, o) { cur5 = k; b5.setShape(S[k], o); $('#say5').textContent = describe(S[k]); }
+set5('bare3');
+const ghostsOf = (from, to) => from.frets.map((f, l) => f && f !== to.frets[l] ? [l, f] : null).filter(Boolean);
+function moveDemo(fromK, toK, t) {
+  set5(fromK);
+  strum(b5, S[fromK], t);
+  const tm = t + 1.4;
+  hushAll(tm);
+  atTime(tm, () => set5(toK, { animate: true, ghosts: ghostsOf(S[fromK], S[toK]) }));
+  strum(b5, S[toK], tm + (reduced() ? 0.15 : MOVE_MS / 1000 + 0.05));
+}
+on('#move5', act(t => moveDemo('bare3', 'bare5', t)));
+on('#strum5', act(t => strum(b5, S[cur5], t)));
+on('#slip5', act(t => moveDemo('bare', 'slip', t)));
+on('#all5', act(t => moveDemo('bare', 'bare2', t)));
+
+/* ---------- Scene 6: progression ---------- */
+const b6 = Board($('#b6'), { shape: true, fingers: true });
+const PROG = ['bare', 'bare3', 'bare5', 'bare'];
+const ACTS = ['Strike', 'Ring', 'Hush', 'Brush'];
+const HINTS = ['', 'Keep pressing. Don\'t strum.', 'Ease off, but keep touching the strings.', 'Strum while hushed: chk.'];
+const T = { on: false, beat: 0, next: 0, count: 0, bpm: 52, loop: true, heard: -1 };
+const prog = $('#prog6'), beatEls = [];
+PROG.forEach(k => {
+  const li = mk('li');
+  li.append(mk('span', 'ps', shapeText(S[k])));
+  ACTS.forEach(a => beatEls.push(li.appendChild(mk('span', 'bt', a))));
+  prog.append(li);
+});
+b6.setShape(S.bare);
+function show6(b, count) {
+  beatEls.forEach((e, i) => e.classList.toggle('now6', i === b));
+  if (b < 0) {
+    $('#word6').textContent = count + 1;
+    $('#hint6').textContent = count < 3 ? 'Count-in. Get your fingers ready.' : 'Count-in. Strike is next.';
+    return;
+  }
+  T.heard = b;
+  const k = PROG[b >> 2], a = b & 3;
+  $('#word6').textContent = ACTS[a];
+  const nk = PROG[((b >> 2) + 1) % 4], moving = a === 3 && (b < 15 || T.loop) && S[nk] !== S[k];
+  $('#hint6').textContent = a === 0 ? `Strum ${shapeText(S[k])} once.` : HINTS[a] + (moving ? ` Then move to ${shapeText(S[nk])}, the dashed rings.` : '');
+  if (a === 0 && b6.shape !== S[k]) b6.setShape(S[k], { animate: true, ms: 260 });
+  if (a === 3) {
+    b6.chk(lanesOf(S[k]));
+    if (moving) b6.setShape(S[k], { ghosts: S[nk].frets.map((f, l) => f ? [l, f, 'next'] : null).filter(Boolean) });
+  }
+}
+function beat6(b, t) {
+  const s = S[PROG[b >> 2]], a = b & 3;
+  if (a === 0) strum(b6, s, t);            // Strike: new sound
+  else if (a === 2) hushAll(t);            // Hush: end every sound
+  else if (a === 3) brush(t, lanesOf(s));  // Brush: muted strum, no notes
+  // Ring (a === 1): nothing is played.
+}
+function pump() {
+  const c = E.ctx;
+  while (T.on && T.next < c.currentTime + 0.25) {
+    const t = T.next, spb = 60 / T.bpm;
+    if (T.count > 0) {
+      const k = 4 - T.count;
+      tick(t, k === 0);
+      atTime(t, () => show6(-1, k));
+      T.count--;
+    } else {
+      const b = T.beat;
+      beat6(b, t);
+      atTime(t, () => show6(b));
+      T.beat = b + 1;
+      if (T.beat === 16) {
+        if (T.loop) T.beat = 0;
+        else { T.on = false; atTime(t + spb, () => stopAll('end')); }
+      }
+    }
+    T.next = t + spb;
+  }
+  if (T.on) wait(40, pump);
+}
+function ui6() {
+  $('#play6').textContent = T.on ? 'Pause' : T.beat > 0 ? 'Resume' : 'Play';
+  if (!T.on) {
+    beatEls.forEach(e => e.classList.remove('now6'));
+    $('#word6').textContent = T.beat > 0 ? 'Paused' : 'Ready';
+    $('#hint6').textContent = T.beat > 0 ? `Resume starts again at ${shapeText(S[PROG[T.beat >> 2]])}, after a count-in.` : 'Press Play. Four ticks count you in.';
+  }
+}
+async function play6(from) {
+  stopAll('new');
+  const g = E.gen;
+  await ready();
+  if (g !== E.gen) return;
+  T.beat = from; T.on = true; T.count = 4; T.heard = -1;
+  T.next = E.ctx.currentTime + 0.1;
+  b6.setShape(S[PROG[from >> 2]]);
+  ui6();
+  pump();
+}
+function pause6() {
+  const pos = T.heard >= 0 ? (T.heard >> 2) << 2 : T.beat;
+  stopAll('pause');
+  T.beat = pos;
+  ui6();
+}
+E.hooks.push(reason => {
+  T.on = false;
+  if (reason !== 'pause' && reason !== 'new') { T.beat = 0; b6.setShape(S.bare); }
+  ui6();
+});
+on('#play6', () => T.on ? pause6() : play6(T.beat));
+on('#top6', () => play6(0));
+on('#loop6', () => { T.loop = !T.loop; $('#loop6').setAttribute('aria-pressed', String(T.loop)); });
+document.querySelectorAll('[data-bpm]').forEach(btn => btn.addEventListener('click', () => {
+  T.bpm = +btn.dataset.bpm;
+  document.querySelectorAll('[data-bpm]').forEach(x => x.setAttribute('aria-pressed', String(x === btn)));
+  $('#bpm6').textContent = `${T.bpm} beats a minute`;
+}));
+
+/* ---------- Page ---------- */
+on('#stop', () => stopAll('stop'));
+on('#mute', () => {
+  E.muted = !E.muted;
+  $('#mute').setAttribute('aria-pressed', String(E.muted));
+  $('#mute').textContent = E.muted ? 'Muted' : 'Mute';
+  if (E.master) E.master.gain.setTargetAtTime(E.muted ? 0 : VOL, E.ctx.currentTime, 0.015);
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden) T.on ? pause6() : stopAll('hidden'); });
+
+let scene = 0;
+function show(n, focus) {
+  n = Math.min(6, Math.max(1, n || 1));
+  if (n !== scene) stopAll('leave');
+  scene = n;
+  document.querySelectorAll('.scene').forEach((s, i) => { s.hidden = i + 1 !== n; });
+  document.querySelectorAll('.tabs a').forEach((a, i) => { if (i + 1 === n) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  document.title = `${n}. ${$('#h' + n).textContent} · Six`;
+  if (focus) { window.scrollTo(0, 0); $('#h' + n).focus({ preventScroll: true }); }
+}
+addEventListener('hashchange', () => show(parseInt(location.hash.slice(1), 10), true));
+show(parseInt(location.hash.slice(1), 10), false);
+</script>
+</body>
+</html>
