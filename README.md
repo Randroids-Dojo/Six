@@ -6,7 +6,7 @@ Six uses experimental names and notation. It calls strings "lanes" and numbers t
 
 Live: https://six-guitar.vercel.app
 
-The lesson is in one file, `six.html`, with no build step or runtime network requests. Open it from disk or use the live site. Audio examples are quiet synthesized practice tones and start after a tap.
+The lesson is in one file, `six.html`, with no build step or runtime network requests. Open it from disk or use the live site.
 
 ## Checks
 
