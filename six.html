@@ -73,14 +73,14 @@ main { max-width: 68rem; margin: 0 auto; padding: .75rem 1rem 2.5rem; }
 }
 .step { margin: 0 0 .15rem; font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--soft); }
 .lead p:last-child, .after p:last-child { margin-bottom: 0; }
-.intro { color: var(--soft); font-size: .95rem; }
 .try { background: var(--card); border-left: 4px solid var(--ink); padding: .6rem .8rem; border-radius: 0 .5rem .5rem 0; }
-.note, .aside { font-size: .92rem; color: var(--soft); }
+.aside { font-size: .92rem; color: var(--soft); }
 ol.steps { margin: 0 0 .7rem; padding-left: 1.4rem; } ol.steps li { margin-bottom: .25rem; }
 .notelabel { width: fit-content; min-height: 1.75rem; margin: -.3rem auto .4rem; padding: .15rem .75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font: 600 .88rem/1.35 system-ui, -apple-system, sans-serif; font-variant-numeric: tabular-nums; }
 .notelabel:empty { border-color: transparent; background: none; }
 /* live readout under the controls: styled apart from the lesson text, amber like the glowing strings */
 .say { display: flex; align-items: center; min-height: 3em; margin: .55rem 0 .5rem; padding: .15rem 0 .15rem .7rem; border-left: 3px solid var(--glow); font-size: .94rem; font-style: italic; color: var(--soft); }
+.say:empty { min-height: 0; margin: 0; padding: 0; border: 0; }
 .ctrl { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
 .ctrl + .ctrl { margin-top: .5rem; }
 .ctrl .lbl { font-size: .85rem; color: var(--soft); margin-right: .1rem; }
@@ -198,7 +198,6 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 <section class="scene" id="s1" aria-labelledby="h1" hidden>
   <div class="head"><p class="step">Scene 1 of 6</p><h2 id="h1" tabindex="-1">Tap a string</h2></div>
   <div class="lead">
-    <p class="intro">Six teaches guitar through short exercises you can hear and play. It uses standard tuning and its own experimental notation.</p>
     <p>The diagram shows the guitar neck, with the tuning pegs at the top. Each column is one string, called a <b>lane</b> in Six. Lane 1 is the thickest string, nearest your face when you hold the guitar. Lane 6 is the thinnest. Guitar books number the strings in the opposite direction.</p>
   </div>
   <div class="stage">
@@ -214,10 +213,9 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
     <p>A <b>0</b> means pluck the string without pressing it anywhere on the neck. This is called playing an <b>open string</b>. Its full length vibrates, from the top of the neck to the bridge on the body.</p>
     <p>To play a numbered fret, press the string just behind its metal bar, toward the tuning pegs. The string vibrates from that bar to the bridge on the body. The diagram lights up this vibrating part. Moving to a higher fret shortens it and raises the pitch.</p>
     <p class="try"><b>On your guitar:</b> pluck lane 1 open, then press and pluck at frets 1, 2 and 3. Keep your fingertip close to the metal bar without pressing on it.</p>
-    <p class="note">The demo uses quiet synthesized tones. Sound starts when you tap.</p>
   </div>
   <details class="more"><summary>Standard terms</summary>
-    <p>Six lanes 1–6 correspond to conventional guitar strings 6–1: low E, A, D, G, B and high E. The meanings of "open" and "fret" stay the same.</p>
+    <p>Six lanes 1–6 correspond to conventional guitar strings 6–1: low E, A, D, G, B and high E.</p>
   </details>
   <nav class="pager" aria-label="Scene"><span></span><a class="btn primary" href="#2">Next: your first chord →</a></nav>
 </section>
@@ -234,7 +232,7 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
       <button class="btn primary" type="button" id="strum2">Strum Bare</button>
       <button class="btn" type="button" id="each2">One lane at a time</button>
     </div>
-    <p class="say" id="say2" aria-live="polite">Play lane 1 open and lanes 2 and 3 at fret 2. Skip lanes 4 to 6.</p>
+    <p class="say" id="say2" aria-live="polite"></p>
   </div>
   <div class="after">
     <ol class="steps">
@@ -255,7 +253,7 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 <section class="scene" id="s3" aria-labelledby="h3" hidden>
   <div class="head"><p class="step">Scene 3 of 6</p><h2 id="h3" tabindex="-1">Same pitch, different place</h2></div>
   <div class="lead">
-    <p>Play A, then B. They are on different strings, but have the same pitch. Six calls each lane and fret pair a <b>position</b>.</p>
+    <p>A and B are on different strings, but have the same pitch. Six calls each lane and fret pair a <b>position</b>.</p>
   </div>
   <div class="stage">
     <div id="b3"></div>
@@ -265,13 +263,13 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
       <button class="btn primary" type="button" id="ab3">A, then B</button>
       <button class="btn" type="button" id="tw3">B, then one octave up</button>
     </div>
-    <p class="say" id="say3" aria-live="polite">Tap a position to hear its pitch and find matching positions.</p>
+    <p class="say" id="say3" aria-live="polite"></p>
   </div>
   <div class="after">
     <p>Six numbers pitches by <b>Height</b>. Lane 1 open is Height 0. Each fret adds 1. The open Heights of lanes 1 to 6 appear in row 0: 0, 5, 10, 15, 19, 24.</p>
     <p>A is 0 + 5 = Height 5. B is 5 + 0 = Height 5. They have the same pitch even though you play them in different places.</p>
     <p>Add 12 to a Height to move up one octave. The note name stays the same. Six calls this a <b>higher twin</b>. B's higher twin is Height 17, at lane 4, fret 2: 15 + 2 = 17.</p>
-    <p class="aside">Lane 5 open is 4 Heights above lane 4 open. This is part of standard guitar tuning.</p>
+    <p class="aside">Lane 5 open is 4 Heights above lane 4 open.</p>
     <p class="try"><b>On your guitar:</b> play lane 1 at fret 5, then lane 2 open. They should have the same pitch. If they differ, check your tuning.</p>
   </div>
   <details class="more"><summary>Standard terms</summary>
@@ -355,7 +353,7 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 <section class="scene" id="s6" aria-labelledby="h6" hidden>
   <div class="head"><p class="step">Scene 6 of 6</p><h2 id="h6" tabindex="-1">Play a progression</h2></div>
   <div class="lead">
-    <p>Play four shapes in order. Give each shape four beats: Strike, Ring, Hush, Brush. Follow along on your guitar.</p>
+    <p>Play four shapes in order. Give each shape four beats: Strike, Ring, Hush, Brush.</p>
   </div>
   <div class="stage">
     <div class="now"><b id="word6">Ready</b><span id="hint6">Press Play. Listen for four count-in ticks.</span></div>
@@ -802,7 +800,7 @@ on('#opens', act(t => {
 /* ---------- Scene 2: build Bare ---------- */
 const b2 = Board($('#b2'), { shape: true, fingers: true });
 b2.setShape(S.bare);
-on('#strum2', act(t => strum(b2, S.bare, t)));
+on('#strum2', act(t => { $('#say2').textContent = ''; strum(b2, S.bare, t); }));
 on('#each2', act(t => lanesOf(S.bare).forEach((l, i) => {
   const tl = t + i * 0.9;
   note(b2, l, S.bare.frets[l], tl);
@@ -842,12 +840,12 @@ const SAY4 = {
   float: 'Float uses root +5 +7. Lane 4 at fret 2 is Height 17. Subtract 12 to get its recipe offset, +5.',
 };
 const chips4 = { wide: '#wide4', close: '#close4', bare: '#bare4', float: '#float4' };
-function set4(k) {
+function set4(k, showReadout = true) {
   b4.setShape(S[k], { change: k === 'bare' ? null : 3, ghosts: k === 'close' ? [[3, 1, 'chg']] : null });
   Object.entries(chips4).forEach(([n, sel]) => $(sel).setAttribute('aria-pressed', String(n === k)));
-  $('#say4').textContent = SAY4[k];
+  if (showReadout) $('#say4').textContent = SAY4[k];
 }
-set4('wide');
+set4('wide', false);
 Object.entries(chips4).forEach(([k, sel]) => on(sel, act(t => { set4(k); strum(b4, S[k], t); })));
 on('#flip4', act(t => ['wide', 'close', 'wide', 'close'].forEach((k, i) => {
   const tk = t + i * 2;
@@ -864,7 +862,7 @@ on('#diff4', act(t => {
 const b5 = Board($('#b5'), { shape: true, table: true, fingers: true });
 let cur5 = 'bare3';
 function set5(k, o) { cur5 = k; b5.setShape(S[k], o); $('#say5').textContent = describe(S[k]); }
-set5('bare3');
+b5.setShape(S.bare3);
 const ghostsOf = (from, to) => from.frets.map((f, l) => f && f !== to.frets[l] ? [l, f] : null).filter(Boolean);
 function moveDemo(fromK, toK, t) {
   set5(fromK);
