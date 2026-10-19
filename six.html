@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Six · an experimental way to learn the guitar</title>
+<title>Six · guitar lessons by touch and sound</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233b2a1e'/%3E%3Cpath d='M6 4v24' stroke='%23ffb020' stroke-width='3'/%3E%3Cpath d='M10.5 4v24' stroke='%23d4b47f' stroke-width='2.4'/%3E%3Cpath d='M15 4v24' stroke='%23d4b47f' stroke-width='2'/%3E%3Cpath d='M19.5 4v24' stroke='%23d4b47f' stroke-width='1.6'/%3E%3Cpath d='M24 4v24' stroke='%23e6e6e6' stroke-width='1.2'/%3E%3Cpath d='M28 4v24' stroke='%23e6e6e6' stroke-width='1'/%3E%3C/svg%3E">
-<meta name="description" content="Six short hands-on scenes for a standard-tuned six-string guitar: lanes, shapes, Height, chord recipes and a first progression.">
+<meta name="description" content="Six short guitar lessons on strings, frets, chords, pitch and a first progression. Uses standard tuning and experimental notation.">
 <style>
 :root {
   --bg: #f4efe6; --card: #fffaf1; --ink: #1e1a15; --soft: #574e43; --line: #d6cab7;
@@ -185,7 +185,7 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
   <ol>
     <li><a href="#1" aria-label="Scene 1: Tap a string"><b>1</b><span>Tap</span></a></li>
     <li><a href="#2" aria-label="Scene 2: Build Bare"><b>2</b><span>Bare</span></a></li>
-    <li><a href="#3" aria-label="Scene 3: Same sound, different place"><b>3</b><span>Height</span></a></li>
+    <li><a href="#3" aria-label="Scene 3: Same pitch, different place"><b>3</b><span>Height</span></a></li>
     <li><a href="#4" aria-label="Scene 4: One finger, Wide or Close"><b>4</b><span>Wide · Close</span></a></li>
     <li><a href="#5" aria-label="Scene 5: Move the whole shape"><b>5</b><span>Move</span></a></li>
     <li><a href="#6" aria-label="Scene 6: Play a progression"><b>6</b><span>Play</span></a></li>
@@ -198,27 +198,26 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 <section class="scene" id="s1" aria-labelledby="h1" hidden>
   <div class="head"><p class="step">Scene 1 of 6</p><h2 id="h1" tabindex="-1">Tap a string</h2></div>
   <div class="lead">
-    <p class="intro">Six is an experimental way to learn a standard-tuned guitar by touch and sound. It is not an established method.</p>
-    <p>Each column is a <b>lane</b>: one string. Lane 1 is the thickest, lane 6 the thinnest. The board is the guitar's neck standing up, head at the top. When you hold the guitar, lane 1 is the string nearest your face.</p>
+    <p class="intro">Six teaches guitar through short exercises you can hear and play. It uses standard tuning and its own experimental notation.</p>
+    <p>The diagram shows the guitar neck, with the tuning pegs at the top. Each column is one string, called a <b>lane</b> in Six. Lane 1 is the thickest string, nearest your face when you hold the guitar. Lane 6 is the thinnest. Guitar books number the strings in the opposite direction.</p>
   </div>
   <div class="stage">
     <div id="b1"></div>
     <p class="notelabel" id="note1" aria-live="polite"></p>
     <div class="ctrl">
-      <button class="btn" type="button" id="climb">Lane 1, frets 0 to 7</button>
-      <button class="btn" type="button" id="opens">Lanes 1 to 6, open</button>
+      <button class="btn" type="button" id="climb">Lane 1: open to fret 7</button>
+      <button class="btn" type="button" id="opens">All six open strings</button>
     </div>
     <p class="say" id="say1" aria-live="polite">Tap a string or fret, or try a demo.</p>
   </div>
   <div class="after">
-    <p><b>0</b> or <b>Open</b> means you pluck the string without pressing it down anywhere on the guitar neck. The whole string vibrates, from the head to the bridge on the body.</p>
-    <p>A <b>fret</b> is the space between two metal wires. Press in one and the string touches the wire nearer the body, so only the part from there to the bridge vibrates: the glowing part. A shorter part sounds higher, so each fret further down the board sounds a little higher.</p>
-    <p class="aside">Guitar books usually number strings the other way: their string 1 is the thinnest. Six counts from the thick side.</p>
-    <p class="try"><b>On your guitar:</b> press with a fingertip inside the fret, close to the wire nearer the body but not on top of it. Pluck lane 1 open, then at frets 1, 2 and 3.</p>
-    <p class="note">The sounds are quiet synthesized practice tones, not recordings of a guitar. Nothing plays until you tap.</p>
+    <p>A <b>0</b> means pluck the string without pressing it anywhere on the neck. This is called playing an <b>open string</b>. Its full length vibrates, from the top of the neck to the bridge on the body.</p>
+    <p>To play a numbered fret, press the string just behind its metal bar, toward the tuning pegs. The string vibrates from that bar to the bridge on the body. The diagram lights up this vibrating part. Moving to a higher fret shortens it and raises the pitch.</p>
+    <p class="try"><b>On your guitar:</b> pluck lane 1 open, then press and pluck at frets 1, 2 and 3. Keep your fingertip close to the metal bar without pressing on it.</p>
+    <p class="note">The demo uses quiet synthesized tones. Sound starts when you tap.</p>
   </div>
   <details class="more"><summary>Standard terms</summary>
-    <p>Lanes 1–6 are what guitar books call strings 6–1: low E, A, D, G, B, high E. "Open" and "fret" mean the same in both.</p>
+    <p>Six lanes 1–6 correspond to conventional guitar strings 6–1: low E, A, D, G, B and high E. The meanings of "open" and "fret" stay the same.</p>
   </details>
   <nav class="pager" aria-label="Scene"><span></span><a class="btn primary" href="#2">Next: your first chord →</a></nav>
 </section>
@@ -227,7 +226,7 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 <section class="scene" id="s2" aria-labelledby="h2" hidden>
   <div class="head"><p class="step">Scene 2 of 6</p><h2 id="h2" tabindex="-1">Build Bare</h2></div>
   <div class="lead">
-    <p>A <b>shape</b> lists one fret per lane, thick to thin, like the row above the board: <b>0 2 2 – – –</b>. 0 means open. A dash means don't play that lane; the board marks it ×.</p>
+    <p>A <b>shape</b> tells you what to play on each lane, from thickest to thinnest. The row above the board shows <b>0 2 2 – – –</b>: play lane 1 open, press lanes 2 and 3 at fret 2, and skip the rest. A dash means skip that lane; the board marks it ×.</p>
   </div>
   <div class="stage">
     <div id="b2"></div>
@@ -235,28 +234,28 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
       <button class="btn primary" type="button" id="strum2">Strum Bare</button>
       <button class="btn" type="button" id="each2">One lane at a time</button>
     </div>
-    <p class="say" id="say2" aria-live="polite">Lane 1 open. Lanes 2 and 3 at fret 2. Lanes 4, 5 and 6 stay silent.</p>
+    <p class="say" id="say2" aria-live="polite">Play lane 1 open and lanes 2 and 3 at fret 2. Skip lanes 4 to 6.</p>
   </div>
   <div class="after">
     <ol class="steps">
-      <li>Middle finger (M) on lane 2, fret 2.</li>
-      <li>Ring finger (R) on lane 3, fret 2.</li>
-      <li>Strum: sweep your thumb or a pick down across lanes 1, 2 and 3 in one motion. Stop before lane 4.</li>
+      <li>Press lane 2 at fret 2 with your middle finger (M).</li>
+      <li>Press lane 3 at fret 2 with your ring finger (R).</li>
+      <li>Sweep your thumb or a pick across lanes 1 to 3 in one motion. Stop before lane 4. This is a <b>strum</b>.</li>
     </ol>
-    <p>Lanes played together make a <b>chord</b>. Six calls this one <b>Bare</b>. Lane 3 is a higher copy of lane 1, so Bare has just two different sounds. Scene 3 shows why.</p>
-    <p class="try"><b>On your guitar:</b> press with the very tips of your fingers. If a lane buzzes, press closer to the wire nearer the body.</p>
+    <p>Notes played together make a <b>chord</b>. Six calls this shape <b>Bare</b>. Lane 3 plays the same note name as lane 1, one octave higher.</p>
+    <p class="try"><b>On your guitar:</b> press with your fingertips. If a string buzzes, press closer to the metal bar.</p>
   </div>
   <details class="more"><summary>Standard terms</summary>
-    <p>Bare is a power chord; this one is E5. Chord charts mark "don't play" with × and "open" with o, the same as Six's – and 0.</p>
+    <p>Bare is a power chord. This one is E5. Standard chord charts use × for a skipped string and o for an open string. Six uses – and 0.</p>
   </details>
-  <nav class="pager" aria-label="Scene"><a class="btn" href="#1">← Back</a><a class="btn primary" href="#3">Next: same sound, different place →</a></nav>
+  <nav class="pager" aria-label="Scene"><a class="btn" href="#1">← Back</a><a class="btn primary" href="#3">Next: same pitch, different place →</a></nav>
 </section>
 
 <!-- 3 -->
 <section class="scene" id="s3" aria-labelledby="h3" hidden>
-  <div class="head"><p class="step">Scene 3 of 6</p><h2 id="h3" tabindex="-1">Same sound, different place</h2></div>
+  <div class="head"><p class="step">Scene 3 of 6</p><h2 id="h3" tabindex="-1">Same pitch, different place</h2></div>
   <div class="lead">
-    <p>A <b>position</b> is a lane plus a fret. Two different positions can make the same sound. Play A, then B.</p>
+    <p>Play A, then B. They are on different strings, but have the same pitch. Six calls each lane and fret pair a <b>position</b>.</p>
   </div>
   <div class="stage">
     <div id="b3"></div>
@@ -264,19 +263,19 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
       <button class="btn" type="button" id="a3">A: lane 1, fret 5</button>
       <button class="btn" type="button" id="bb3">B: lane 2, open</button>
       <button class="btn primary" type="button" id="ab3">A, then B</button>
-      <button class="btn" type="button" id="tw3">B, then +12</button>
+      <button class="btn" type="button" id="tw3">B, then one octave up</button>
     </div>
-    <p class="say" id="say3" aria-live="polite">Tap any spot to hear it and see where else it sounds.</p>
+    <p class="say" id="say3" aria-live="polite">Tap a position to hear its pitch and find matching positions.</p>
   </div>
   <div class="after">
-    <p>They make the same sound. Six gives every sound a number, its <b>Height</b>. Lane 1 open is Height 0, and every fret adds 1. Each lane starts at its own open Height, shown in row 0: 0, 5, 10, 15, 19, 24.</p>
-        <p>A is 0 + 5 = 5. B is 5 + 0 = 5. Same Height, same sound, different place.</p>
-    <p>Add 12 and you get the <b>higher twin</b>: the same sound, higher. B's twin is 5 + 12 = 17, at lane 4, fret 2 (15 + 2).</p>
-    <p class="aside">Lane 5 starts only 4 above lane 4. That is how standard tuning works.</p>
-    <p class="try"><b>On your guitar:</b> play lane 1 at fret 5, then lane 2 open. They should match. If they don't, the guitar needs tuning.</p>
+    <p>Six numbers pitches by <b>Height</b>. Lane 1 open is Height 0. Each fret adds 1. The open Heights of lanes 1 to 6 appear in row 0: 0, 5, 10, 15, 19, 24.</p>
+    <p>A is 0 + 5 = Height 5. B is 5 + 0 = Height 5. They have the same pitch even though you play them in different places.</p>
+    <p>Add 12 to a Height to move up one octave. The note name stays the same. Six calls this a <b>higher twin</b>. B's higher twin is Height 17, at lane 4, fret 2: 15 + 2 = 17.</p>
+    <p class="aside">Lane 5 open is 4 Heights above lane 4 open. This is part of standard guitar tuning.</p>
+    <p class="try"><b>On your guitar:</b> play lane 1 at fret 5, then lane 2 open. They should have the same pitch. If they differ, check your tuning.</p>
   </div>
   <details class="more"><summary>Standard terms</summary>
-    <p>Height counts semitones (half steps) above low E. The same Height in two places is the same note, a unison. Twelve higher is one octave.</p>
+    <p>Height counts semitones, or half steps, above the open low E string. Two positions with the same Height play in unison. A difference of 12 Heights is one octave.</p>
   </details>
   <nav class="pager" aria-label="Scene"><a class="btn" href="#2">← Back</a><a class="btn primary" href="#4">Next: one finger →</a></nav>
 </section>
@@ -285,8 +284,8 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 <section class="scene" id="s4" aria-labelledby="h4" hidden>
   <div class="head"><p class="step">Scene 4 of 6</p><h2 id="h4" tabindex="-1">One finger: Wide or Close</h2></div>
   <div class="lead">
-    <p>Wide and Close keep Bare's two fingers and strum all six lanes. Wide adds your index finger (I) on lane 4, fret 1. Lift it and you get Close.</p>
-    <p>Every chord has a <b>root</b>, the sound it is built from (here lane 1 open, Height 0), and a <b>recipe</b>: how far its other sounds sit above the root.</p>
+    <p>Keep Bare's two fingers down, and strum all six strings. For <b>Wide</b>, also press lane 4 at fret 1 with your index finger (I). Lift that finger for <b>Close</b>.</p>
+    <p>Six builds these shapes from a <b>root</b>, their reference note. Here it is lane 1 open, Height 0. A <b>recipe</b> lists the pitch distances from that root. These distances are not fret positions.</p>
   </div>
   <div class="stage">
     <div id="b4"></div>
@@ -306,14 +305,14 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
     <p class="say" id="say4" aria-live="polite"></p>
   </div>
   <div class="after">
-    <p>Recipe numbers are distances above the root, not frets. A twin is not a new sound, so keep taking 12 away until a distance is under 12.</p>
+    <p>A recipe lists pitch distances within one octave of the root. For a distance of 12 or more, subtract 12 until it is below 12.</p>
     <dl class="recipes">
       <dt>Bare</dt><dd>root +7</dd>
       <dt>Wide</dt><dd>root +4 +7</dd>
       <dt>Close</dt><dd>root +3 +7</dd>
       <dt>Float</dt><dd>root +5 +7</dd>
     </dl>
-    <p>Wide's lane 4 is Height 16: 16 − 12 = 4. Close's lane 4 is 15: 15 − 12 = 3. One fret changes the recipe.</p>
+    <p>The Height row shows each note's pitch number. The recipe row shows its distance from the root within one octave. On lane 4, lifting your finger changes the recipe offset from +4 (Wide) to +3 (Close).</p>
     <p class="try"><b>On your guitar:</b> strum Wide, then lift only your index finger and strum again. Keep the other two fingers pressed.</p>
   </div>
   <details class="more"><summary>Standard terms</summary>
@@ -326,28 +325,28 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 <section class="scene" id="s5" aria-labelledby="h5" hidden>
   <div class="head"><p class="step">Scene 5 of 6</p><h2 id="h5" tabindex="-1">Move the whole shape</h2></div>
   <div class="lead">
-    <p>Move every lane you play by the same number of frets and the recipe stays the same. Only the root changes.</p>
+    <p>Move every played note up by the same number of frets. The root rises, but the pitch distances in the recipe stay the same.</p>
   </div>
   <div class="stage">
     <div id="b5"></div>
     <div class="ctrl">
-      <button class="btn primary" type="button" id="move5">Move 3 5 5 two frets higher</button>
+      <button class="btn primary" type="button" id="move5">Move 3 5 5 up two frets</button>
       <button class="btn" type="button" id="strum5">Strum</button>
     </div>
     <div class="ctrl">
-      <span class="lbl">0 2 2 – – –, two frets higher:</span>
+      <span class="lbl">Move 0 2 2 up two frets:</span>
       <button class="btn small" type="button" id="slip5">Fingers only</button>
       <button class="btn small" type="button" id="all5">Every lane</button>
     </div>
     <p class="say" id="say5" aria-live="polite"></p>
   </div>
   <div class="after">
-    <p>Index on lane 1, fret 3. Ring on lane 2, fret 5. Pinky on lane 3, fret 5. Keep that hand shape and slide it two frets toward the body: 3 5 5 – – – becomes 5 7 7 – – –. Dashed circles show where your fingers were. Every Height rises by 2, so every distance above the root stays the same.</p>
-    <p>Open lanes are different. There is no finger on them to slide. In 0 2 2 – – –, moving only your fingers leaves lane 1 at Height 0 while lanes 2 and 3 rise, and the recipe breaks. To keep Bare, lane 1 has to move too. Use the 3 5 5 grip: index at fret 2, ring and pinky at fret 4, giving 2 4 4 – – –.</p>
-    <p class="try"><b>On your guitar:</b> make 3 5 5 – – –, strum, then ease the pressure and slide your whole hand two frets toward the body. Press and strum again.</p>
+    <p>For 3 5 5 – – –, press lane 1 at fret 3 with your index finger, lane 2 at fret 5 with your ring finger, and lane 3 at fret 5 with your pinky. Slide all three fingers two frets toward the guitar body. The shape becomes 5 7 7 – – –. Dashed circles mark the old positions. Every played Height rises by 2, so the recipe stays the same.</p>
+    <p>An open string has no finger to slide. In 0 2 2 – – –, moving only your fingers leaves lane 1 at Height 0. The other two notes rise, so the recipe changes. To move the whole Bare shape up two frets, press lane 1 at fret 2 with your index finger and lanes 2 and 3 at fret 4 with your ring finger and pinky. The result is 2 4 4 – – –.</p>
+    <p class="try"><b>On your guitar:</b> play 3 5 5 – – – once. Ease your finger pressure, slide your hand two frets toward the body, then press and strum again.</p>
   </div>
   <details class="more"><summary>Standard terms</summary>
-    <p>Sliding a shape is called shifting, and it transposes the chord: 3 5 5 is G5, 5 7 7 is A5 and 2 4 4 is F♯5. A shape with no open strings is a "movable shape".</p>
+    <p>Sliding a shape to new frets is called shifting. It transposes the chord: 3 5 5 is G5, 5 7 7 is A5, and 2 4 4 is F♯5. A shape with no open strings is movable.</p>
   </details>
   <nav class="pager" aria-label="Scene"><a class="btn" href="#4">← Back</a><a class="btn primary" href="#6">Next: play a progression →</a></nav>
 </section>
@@ -356,10 +355,10 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
 <section class="scene" id="s6" aria-labelledby="h6" hidden>
   <div class="head"><p class="step">Scene 6 of 6</p><h2 id="h6" tabindex="-1">Play a progression</h2></div>
   <div class="lead">
-    <p>Four shapes, four slow beats each: Strike, Ring, Hush, Brush. Play along on your guitar.</p>
+    <p>Play four shapes in order. Give each shape four beats: Strike, Ring, Hush, Brush. Follow along on your guitar.</p>
   </div>
   <div class="stage">
-    <div class="now"><b id="word6">Ready</b><span id="hint6">Press Play. Four ticks count you in.</span></div>
+    <div class="now"><b id="word6">Ready</b><span id="hint6">Press Play. Listen for four count-in ticks.</span></div>
     <div class="ctrl">
       <button class="btn primary" type="button" id="play6">Play</button>
       <button class="btn" type="button" id="top6">From the top</button>
@@ -377,15 +376,15 @@ dl.acts dt { font-weight: 700; } dl.acts dd { margin: 0; }
   </div>
   <div class="after">
     <dl class="acts">
-      <dt>Strike</dt><dd>Strum the shape once. A sound starts.</dd>
-      <dt>Ring</dt><dd>Keep pressing and don't strum. The sound keeps going.</dd>
-      <dt>Hush</dt><dd>Ease off so your fingers just touch the strings without pressing. In 0 2 2 – – –, let one finger rest on lane 1 too. The sound stops.</dd>
-      <dt>Brush</dt><dd>Strum while still hushed: a dry "chk", no notes. Then press the next shape.</dd>
+      <dt>Strike</dt><dd>Strum once.</dd>
+      <dt>Ring</dt><dd>Keep your fingers pressed and let the notes sound. Do not strum again.</dd>
+      <dt>Hush</dt><dd>Ease off until your fingers touch the strings without pressing them. For 0 2 2 – – –, touch lane 1 with a finger too. This stops the notes.</dd>
+      <dt>Brush</dt><dd>Strum while your fingers still mute the strings. You should hear a short, dry sound. Then press the next shape.</dd>
     </dl>
-    <p class="try"><b>On your guitar:</b> start at Slowest. Say the four words out loud as you play.</p>
+    <p class="try"><b>On your guitar:</b> start at Slowest. Say "Strike, Ring, Hush, Brush" as you play each shape.</p>
   </div>
   <details class="more"><summary>Standard terms</summary>
-    <p>E5 → G5 → A5 → E5, one bar of 4/4 each. Strike = strum, Ring = let ring (sustain), Hush = fretting-hand mute, Brush = muted strum, often called a "chuck" or "scratch".</p>
+    <p>The progression is E5 → G5 → A5 → E5, with one bar of 4/4 per shape. Ring means sustain. Hush is a fretting-hand mute. Brush is a muted strum, sometimes called a "chuck" or "scratch".</p>
   </details>
   <nav class="pager" aria-label="Scene"><a class="btn" href="#5">← Back</a><a class="btn" href="#1">Start again from scene 1</a></nav>
 </section>
@@ -422,9 +421,8 @@ function recipe(s) {
 }
 function describe(s) {
   const hs = heights(s).filter(h => h != null), r = recipe(s);
-  const ups = [...new Set(hs.map(h => h - r.root).filter(Boolean))].map(d => '+' + d).join(', ');
-  return `${shapeText(s)}: Heights ${hs.join(' · ')}. Root ${r.root}, then ${ups}. ` +
-    (r.name ? `Recipe ${r.text}: ${r.name}.` : `Recipe ${r.text}: not Bare any more.`);
+  return `${shapeText(s)}: Heights ${hs.join(' · ')}. Root Height ${r.root}. ` +
+    (r.name ? `Recipe ${r.text}: ${r.name}.` : `Recipe ${r.text}: not Bare.`);
 }
 
 /* ---------- Sound ---------- */
@@ -627,7 +625,7 @@ function Board(host, opt = {}) {
 
   const neck = mk('div', 'fb-neck');
   neck.setAttribute('role', 'grid');
-  neck.setAttribute('aria-label', 'Fretboard. Lanes 1 to 6 run left to right, thick to thin. Frets 0 to 7 run top to bottom. Use arrow keys to move, Enter to play.');
+  neck.setAttribute('aria-label', 'Fretboard. Lanes 1 to 6 run left to right, thick to thin. Open strings are at the top, followed by frets 1 to 7. Use arrow keys to move and Enter to play.');
   const bg = mk('div', 'fb-layer fb-bg');
   bg.setAttribute('aria-hidden', 'true');
   bg.append(mk('i', 'wood'), mk('i', 'tailwood'), mk('i', 'nut'));
@@ -671,12 +669,12 @@ function Board(host, opt = {}) {
 
   if (opt.table) {
     const tb = mk('div', 'fb-table');
-    tb.append(put(mk('span', 'fb-gl', 'Height'), 1, 1), put(mk('span', 'fb-gl', 'above root'), 1, 2));
+    tb.append(put(mk('span', 'fb-gl', 'Height'), 1, 1), put(mk('span', 'fb-gl', 'recipe'), 1, 2));
     b.tH = OPEN.map((_, l) => tb.appendChild(put(mk('span', 'fb-tv'), l + 2, 1)));
     b.tR = OPEN.map((_, l) => tb.appendChild(put(mk('span', 'fb-tv'), l + 2, 2)));
     host.append(tb);
   }
-  if (opt.fingers) host.append(mk('p', 'legend', 'Fingers: I index · M middle · R ring · P pinky'));
+  if (opt.fingers) host.append(mk('p', 'legend', 'Finger labels: I index · M middle · R ring · P pinky'));
 
   neck.addEventListener('keydown', e => {
     const m = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
@@ -817,7 +815,7 @@ b3.addMarks([[0, 5, 'A'], [1, 0, 'B']]);
 const say3 = (l, f, extra) => {
   const h = OPEN[l] + f;
   b3.highlight(h);
-  $('#say3').textContent = extra || `${posName(l, f)}: ${OPEN[l]} + ${f} = Height ${h}. Solid rings: same Height. Dashed rings: twins, 12 or 24 apart.`;
+  $('#say3').textContent = extra || `${posName(l, f)}: open Height ${OPEN[l]} + fret ${f} = Height ${h}. Solid rings mark the same pitch. Dashed rings mark pitches an octave or two apart.`;
 };
 b3.onTap = (l, f) => tapNote(b3, l, f, () => say3(l, f));
 on('#a3', act(t => { note(b3, 0, 5, t); atTime(t, () => say3(0, 5)); }));
@@ -826,22 +824,22 @@ on('#ab3', act(t => {
   release(note(b3, 0, 5, t), t + 1.2);
   atTime(t, () => say3(0, 5, 'A: lane 1, fret 5. Height 0 + 5 = 5.'));
   note(b3, 1, 0, t + 1.4);
-  atTime(t + 1.4, () => say3(1, 0, 'B: lane 2, open. Height 5 + 0 = 5. Same Height as A, so the same sound.'));
+  atTime(t + 1.4, () => say3(1, 0, 'B: lane 2, open. Height 5 + 0 = 5. Same pitch as A.'));
 }));
 on('#tw3', act(t => {
   release(note(b3, 1, 0, t), t + 1.2);
   atTime(t, () => say3(1, 0, 'B: lane 2, open. Height 5.'));
   note(b3, 3, 2, t + 1.4);
-  atTime(t + 1.4, () => say3(3, 2, 'Lane 4, fret 2: 15 + 2 = Height 17, which is 5 + 12. B\'s higher twin: the same sound, higher.'));
+  atTime(t + 1.4, () => say3(3, 2, 'Lane 4, fret 2: 15 + 2 = Height 17. This is 12 above B, so it has the same note name one octave higher.'));
 }));
 
 /* ---------- Scene 4: one finger ---------- */
 const b4 = Board($('#b4'), { shape: true, table: true, fingers: true });
 const SAY4 = {
-  wide: 'Wide: root +4 +7. Your index finger puts lane 4 at Height 16: 16 − 12 = 4 above the root.',
-  close: 'Close: root +3 +7. The index finger has lifted (dashed ring), so lane 4 sounds open at Height 15: 15 − 12 = 3.',
-  bare: 'Bare: root +7. Only lanes 1 to 3 play: Heights 0, 7 and 12, and 12 is the root\'s twin.',
-  float: 'Float: root +5 +7. Lane 4 at fret 2 is Height 17: 17 − 12 = 5 above the root.',
+  wide: 'Wide uses root +4 +7. Lane 4 at fret 1 is Height 16. Subtract 12 to get its recipe offset, +4.',
+  close: 'Close uses root +3 +7. Lane 4 is open at Height 15. Subtract 12 to get its recipe offset, +3. The dashed ring shows the lifted finger.',
+  bare: 'Bare uses root +7. Only lanes 1 to 3 play, at Heights 0, 7 and 12. Height 12 is an octave above the root.',
+  float: 'Float uses root +5 +7. Lane 4 at fret 2 is Height 17. Subtract 12 to get its recipe offset, +5.',
 };
 const chips4 = { wide: '#wide4', close: '#close4', bare: '#bare4', float: '#float4' };
 function set4(k) {
@@ -858,7 +856,7 @@ on('#flip4', act(t => ['wide', 'close', 'wide', 'close'].forEach((k, i) => {
 })));
 on('#diff4', act(t => {
   set4('wide');
-  [[1, 'Lane 4, fret 1 (Wide): Height 16.'], [0, 'Lane 4, open (Close): Height 15. One fret lower.']].concat([[1, 'Height 16 again.'], [0, 'Height 15 again.']])
+  [[1, 'Wide: lane 4 at fret 1, Height 16.'], [0, 'Close: lane 4 open, Height 15. One Height lower.']].concat([[1, 'Wide: Height 16 again.'], [0, 'Close: Height 15 again.']])
     .forEach(([f, msg], i) => { const tf = t + i * 1.2; note(b4, 3, f, tf); atTime(tf, () => { $('#say4').textContent = msg; }); });
 }));
 
@@ -885,7 +883,7 @@ on('#all5', act(t => moveDemo('bare', 'bare2', t)));
 const b6 = Board($('#b6'), { shape: true, fingers: true });
 const PROG = ['bare', 'bare3', 'bare5', 'bare'];
 const ACTS = ['Strike', 'Ring', 'Hush', 'Brush'];
-const HINTS = ['', 'Keep pressing. Don\'t strum.', 'Ease off, but keep touching the strings.', 'Strum while hushed: chk.'];
+const HINTS = ['', 'Keep pressing. Let the notes ring.', 'Ease off, but keep touching the strings.', 'Strum the muted strings once.'];
 const T = { on: false, beat: 0, next: 0, count: 0, bpm: 52, loop: true, heard: -1 };
 const prog = $('#prog6'), beatEls = [];
 PROG.forEach(k => {
@@ -899,14 +897,14 @@ function show6(b, count) {
   beatEls.forEach((e, i) => e.classList.toggle('now6', i === b));
   if (b < 0) {
     $('#word6').textContent = count + 1;
-    $('#hint6').textContent = count < 3 ? 'Count-in. Get your fingers ready.' : 'Count-in. Strike is next.';
+    $('#hint6').textContent = count < 3 ? 'Get your fingers ready.' : 'Strike on the next beat.';
     return;
   }
   T.heard = b;
   const k = PROG[b >> 2], a = b & 3;
   $('#word6').textContent = ACTS[a];
   const nk = PROG[((b >> 2) + 1) % 4], moving = a === 3 && (b < 15 || T.loop) && S[nk] !== S[k];
-  $('#hint6').textContent = a === 0 ? `Strum ${shapeText(S[k])} once.` : HINTS[a] + (moving ? ` Then move to ${shapeText(S[nk])}, the dashed rings.` : '');
+  $('#hint6').textContent = a === 0 ? `Strum ${shapeText(S[k])} once.` : HINTS[a] + (moving ? ` Next shape: ${shapeText(S[nk])}. Dashed rings show where to press.` : '');
   if (a === 0 && b6.shape !== S[k]) b6.setShape(S[k], { animate: true, ms: 260 });
   if (a === 3) {
     b6.chk(lanesOf(S[k]));
@@ -948,7 +946,7 @@ function ui6() {
   if (!T.on) {
     beatEls.forEach(e => e.classList.remove('now6'));
     $('#word6').textContent = T.beat > 0 ? 'Paused' : 'Ready';
-    $('#hint6').textContent = T.beat > 0 ? `Resume starts again at ${shapeText(S[PROG[T.beat >> 2]])}, after a count-in.` : 'Press Play. Four ticks count you in.';
+    $('#hint6').textContent = T.beat > 0 ? `Press Resume to hear four count-in ticks, then play ${shapeText(S[PROG[T.beat >> 2]])}.` : 'Press Play. Listen for four count-in ticks.';
   }
 }
 async function play6(from) {

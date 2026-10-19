@@ -1,18 +1,16 @@
 # Six
 
-An experimental way to learn a standard-tuned six-string guitar by touch and sound, in six short scenes:
-lanes, shapes, Height, chord recipes, moving a shape, and a first progression (Strike, Ring, Hush, Brush).
+Six is a set of six short guitar lessons. You can hear each example on screen and try it on a standard-tuned guitar. The lessons cover strings and frets, chord shapes, pitch, chord recipes, moving a shape, and a first progression.
+
+Six uses experimental names and notation. It calls strings "lanes" and numbers them from thickest (lane 1) to thinnest (lane 6), the opposite of conventional guitar string numbering. Height counts pitch in semitones above the open low E string. Recipe numbers describe distances from a chord's root; they are not fret positions.
 
 Live: https://six-guitar.vercel.app
 
-Everything is in one file, `six.html`: HTML, CSS, JavaScript and Web Audio, with no libraries, network requests or build step.
-Open it straight from disk or from the deployment. Sounds are quiet synthesized practice tones and only play after a tap.
+The lesson is in one file, `six.html`, with no build step or runtime network requests. Open it from disk or use the live site. Audio examples are quiet synthesized practice tones and start after a tap.
 
 ## Checks
 
-`qa/` drives real Google Chrome through playwright-core. `qa/instrument.js` logs every audio source start and stop and captures the final mix,
-so the checks measure the actual sound: pitch against 82.406889 × 2^(Height/12), recipes, Ring starting nothing, Hush, Stop,
-leaving a scene and Mute going silent, keyboard use, reduced motion, touch targets and overflow from 320 to 1920 px.
+`qa/` uses playwright-core to test the lesson in Chrome. The checks measure output pitch, chord recipes and playback; they also cover keyboard use, reduced motion, touch targets, and layout widths from 320 to 1920 px.
 
 ```sh
 cd qa
